@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fathom": {
+      "type": "http",
+      "url": "https://api.fathom.ai/mcp"
+    },
+    "fireflies": {
+      "type": "http",
+      "url": "https://api.fireflies.ai/mcp"
+    }
+  }
+}

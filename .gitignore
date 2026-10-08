@@ -1,0 +1,6 @@
+plugins/sales-call-review/evals/results/
+graded-calls.json
+graded-batch.json
+*.zip
+.DS_Store
+dist/

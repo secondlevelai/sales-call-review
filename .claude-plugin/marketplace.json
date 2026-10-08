@@ -1,0 +1,14 @@
+{
+  "name": "bingobuildsai",
+  "description": "Free tools for high-ticket sales teams, by @bingobuildsai",
+  "owner": {
+    "name": "bingobuildsai"
+  },
+  "plugins": [
+    {
+      "name": "sales-call-review",
+      "source": "./plugins/sales-call-review",
+      "description": "Grade every sales call from Fathom or Fireflies and see where each closer is losing deals, with exact quotes and what to say instead."
+    }
+  ]
+}
