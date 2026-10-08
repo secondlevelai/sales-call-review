@@ -4,7 +4,7 @@
 
 <!-- MODULE METADATA
 module: sales-call-review
-version: v1.2.0
+version: v1.2.1
 status: RELEASED
 released: 2026-10-08
 requires: [claude-paid-plan, fathom-or-fireflies]
@@ -165,7 +165,7 @@ Group the last 14 days of meetings by who recorded them and show the counts per 
 
 If `SCOPE = team` and closers are missing:
 - **Fathom:** put closers on one team (e.g. **Sales**) with sales calls shared to it, or have a Fathom **Admin** granted **view access to all shared calls** and connect with that account. Private calls can't be included.
-- **Fireflies:** set the sales team's meeting privacy so the user can view their calls (or use a shared **Sales** channel). Meetings private to their owner need a **Super Admin** account (Fireflies Enterprise).
+- **Fireflies:** teammates in the same workspace are visible by default. A missing closer is either not in the workspace (invite them) or changed their privacy: **Settings → Personal → Recording & Privacy → Privacy & Access → Teammates & anyone with link**, applied to all meetings. "Only me" meetings can't be included.
 
 [VERIFY] Re-run the list. Every closer they expect appears.
 

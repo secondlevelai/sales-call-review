@@ -4,9 +4,9 @@ Fireflies' official connector is at `https://api.fireflies.ai/mcp`. Pick tools b
 
 ## Which calls this account can see
 
-- Meetings the signed-in user organized, plus teammates' meetings the workspace's privacy settings let them view.
+- Meetings the signed-in user organized, plus teammates' meetings. **By default, everyone in the same Fireflies workspace can see each other's meetings** (privacy "Teammates & anyone with link", shown in #All Meetings).
 - `mine` is an option, not the default. Leave it off for team reviews.
-- Meetings set private to their owner are visible only to a **Super Admin** (Fireflies Enterprise).
+- A teammate's meetings are hidden only if they're in a different workspace, or they set their privacy to "Only participants" or "Only me".
 
 ## Listing meetings (cheap: no transcripts)
 
@@ -41,4 +41,4 @@ The rep is the organizer (the closer). The lead is the external participant. Mat
 
 If every call is organized by the signed-in user, tell them:
 
-> "I can only see meetings your Fireflies privacy settings let you view. To review the whole team, set the sales team's meeting privacy so teammates can view calls (or put sales calls in a shared Sales channel). Meetings set private to their owner need a Super Admin account, which is on Fireflies Enterprise."
+> "I can only see calls from people in your Fireflies workspace who share them with teammates. That's the default, so a missing closer is usually either not in your workspace (invite them), or has changed their privacy. They can fix it in Fireflies under Settings → Personal → Recording & Privacy → Privacy & Access → 'Teammates & anyone with link', applied to all meetings. Meetings set to 'Only me' can't be included."

@@ -1,7 +1,7 @@
 {
   "name": "sales-call-review",
   "displayName": "Sales Call Review",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Grade every sales call from Fathom or Fireflies and see where each closer is losing deals: objections, mistakes, exact quotes, and what to say instead.",
   "author": { "name": "Second Level AI", "url": "https://github.com/secondlevelai" },
   "homepage": "https://github.com/secondlevelai/sales-call-review",

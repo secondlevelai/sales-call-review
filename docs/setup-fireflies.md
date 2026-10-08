@@ -2,16 +2,19 @@
 
 ## Connect
 
-In Claude: **Customize → Plugins → Sales Call Review → Connectors → Fireflies → Connect**, then sign in to Fireflies.
+- **Claude app or claude.ai chat:** **Customize → Plugins → Sales Call Review → Connectors → Fireflies → Connect**, then sign in.
+- **Claude Code** (desktop app Code tab, VS Code, Cursor, terminal): ask Claude to "set up Sales Call Review" and it opens the sign-in for you, or type `/mcp` → `plugin:sales-call-review:fireflies` → **Authenticate**.
 
 ## Review the whole team
 
-The plugin sees every meeting your Fireflies account is allowed to view: meetings you organized, plus teammates' meetings that your workspace's privacy settings let you see. To review every closer:
+**Usually nothing to do.** By default, everyone in the same Fireflies workspace can see each other's meetings (privacy setting "Teammates & anyone with link", the #All Meetings tab). So once you connect, your closers' sales calls are included.
 
-1. Set your sales team's **meeting privacy** so teammates (or at least you) can view their calls.
-2. Optional: put sales calls in a shared **Sales channel**. Then you can ask "Review the Sales channel from last week."
+If a closer's calls are missing:
 
-**Meetings set private to their owner** can only be seen by a **Super Admin**, which is on Fireflies Enterprise. If you're on Enterprise, connect the plugin with a Super Admin account to include them.
+1. **Check they're in your Fireflies workspace.** If not, invite them to your team in Fireflies.
+2. **Check their privacy setting.** In Fireflies: **Settings → Personal → Recording & Privacy → Privacy & Access** → choose **Teammates & anyone with link** (or **Only participants & teammates**). When Fireflies asks, apply it to **all meetings**, not just future ones.
+
+Meetings set to **Only me** stay private, even from admins, so they can't be included.
 
 ## Tips
 

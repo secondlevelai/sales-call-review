@@ -116,10 +116,10 @@ If `SCOPE = me`, or everyone they expect is there → Step 3.
 3. **Private** calls can't be included. Ask closers to share sales calls.
 Can't find the setting? Fathom's help center → search "share calls with team".
 
-**Fireflies:**
-1. Set the sales team's **meeting privacy** so you can view their calls (workspace privacy settings).
-2. Optional: put sales calls in a shared **Sales** channel.
-3. Meetings private to their owner need a **Super Admin** account (Fireflies Enterprise).
+**Fireflies:** by default everyone in the same Fireflies workspace can see each other's meetings (privacy "Teammates & anyone with link"). So a missing closer usually means one of two things:
+1. **They're not in your Fireflies workspace.** Invite them to the same team in Fireflies.
+2. **They changed their privacy.** Have them open **Settings → Personal → Recording & Privacy → Privacy & Access** in Fireflies and pick **Teammates & anyone with link** (or **Only participants & teammates**). When asked, choose to apply it to **all meetings**, not just future ones.
+Meetings set to **Only me** stay private, even from admins.
 
 [VERIFY] Re-run the 14-day list. Every closer they expect appears.
 
