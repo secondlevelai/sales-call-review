@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Guided first-time setup for Sales Call Review, such as "set up Sales Call Review", "help me connect Fathom", "connect Fireflies", "how do I get started", or right after the plugin is installed. Walks step by step through connecting Fathom or Fireflies (Claude app, desktop app, VS Code, Cursor or terminal), checking which closers' calls are visible, and running the first review with its interactive report.
+description: Guided first-time setup for Sales Call Review, such as "set up Sales Call Review", "help me connect Fathom", "connect Fireflies", "how do I get started", right after the plugin is installed, or when the user pastes the github.com/secondlevelai/sales-call-review link. Walks step by step through connecting Fathom or Fireflies (Claude app, desktop app, VS Code, Cursor or terminal), checking which closers' calls are visible, and running the first review with its interactive report.
 ---
 
 # Sales Call Review: guided setup
@@ -23,6 +23,10 @@ You are walking a sales manager or offer owner through setting up Sales Call Rev
 - **You can't run commands** → they're in the **Claude app or claude.ai chat**. Use **Path B**.
 
 ---
+
+## If they pasted the repo link and it's already installed
+
+Don't describe the plugin. Go straight to Step 0's questions. If `sales-call-review.json` already exists and the recorder shows **Connected** in `claude mcp list`, skip setup and say: "You're already set up ✅ Say **'review last week's sales calls'** to run a review."
 
 ## STEP 0: Right after install, say what's next
 
