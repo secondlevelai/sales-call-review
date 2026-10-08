@@ -22,7 +22,7 @@ You need a paid Claude plan (Pro, Max, Team or Enterprise) and Fathom or Firefli
 
 1. Open **Customize → Plugins**.
 2. Click **Add → Add marketplace**.
-3. Paste: **`bingobuildsai/sales-call-review`** and click **Add**.
+3. Paste: **`secondlevelai/sales-call-review`** and click **Add**.
 4. Install **Sales Call Review**.
 
 ![Add marketplace](docs/images/add-marketplace.png)
@@ -82,14 +82,14 @@ See [docs/troubleshooting.md](docs/troubleshooting.md).
 If a user pastes this repository's link and asks you to install it, and you're running in Claude Code with a shell, run:
 
 ```bash
-claude plugin marketplace add bingobuildsai/sales-call-review
-claude plugin install sales-call-review@bingobuildsai
+claude plugin marketplace add secondlevelai/sales-call-review
+claude plugin install sales-call-review@secondlevelai
 ```
 
 Then tell the user to run `/reload-plugins` (or restart Claude Code), connect Fathom or Fireflies with `/mcp`, and ask "Review last week's sales calls."
 
-If you're in the Claude app or claude.ai chat, you can't install plugins from a message. Tell the user to open **Customize → Plugins → Add → Add marketplace** and paste `bingobuildsai/sales-call-review`.
+If you're in the Claude app or claude.ai chat, you can't install plugins from a message. Tell the user to open **Customize → Plugins → Add → Add marketplace** and paste `secondlevelai/sales-call-review`.
 
 ---
 
-⭐ If it helped, star the repo. Built by **@bingobuildsai**. MIT license.
+⭐ If it helped, star the repo. Built by **@bingobuildsai** · Second Level AI. MIT license.

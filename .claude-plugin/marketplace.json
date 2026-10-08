@@ -1,8 +1,9 @@
 {
-  "name": "bingobuildsai",
-  "description": "Free tools for high-ticket sales teams, by @bingobuildsai",
+  "name": "secondlevelai",
+  "description": "Free tools for high-ticket sales teams, by Second Level AI",
   "owner": {
-    "name": "bingobuildsai"
+    "name": "Second Level AI",
+    "url": "https://github.com/secondlevelai"
   },
   "plugins": [
     {
