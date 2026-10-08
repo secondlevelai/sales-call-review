@@ -4,7 +4,7 @@
 
 <!-- MODULE METADATA
 module: sales-call-review
-version: v1.3.0
+version: v1.3.2
 status: RELEASED
 released: 2026-10-08
 requires: [claude-paid-plan, fathom-or-fireflies]
@@ -30,7 +30,7 @@ You are helping someone install and set up Sales Call Review. They pasted this r
 - Never skip a **[VERIFY]**.
 
 **Flow (Path A): one continuous run, with no "now say set it up" in between.**
-Install → immediately ask the two questions → start the sign-in → confirm it's connected → save the setup → finish with ONE next step: "type `/reload-plugins`, then say 'review last week's sales calls'." Don't ask them to reload until the very end. Everything before that uses shell commands, which work before the plugin is loaded.
+Install → immediately ask the two questions → have them type `/reload-plugins` and then `/mcp` → **Authenticate** (one message) → confirm it's connected → save the setup → finish with ONE next step: "say 'review last week's sales calls'." Never run `claude mcp login` through your shell tool; it needs a real terminal.
 
 **Where they're running Claude:**
 - **You can run shell commands** → Claude Code: the Claude **desktop app's Code tab**, **VS Code**, **Cursor**, or a **terminal**. Use **Path A** everywhere below.
@@ -39,7 +39,7 @@ Install → immediately ask the two questions → start the sign-in → confirm 
 **Error handling:**
 - `claude plugin marketplace add` fails → check internet and retry. It's a public GitHub repo, so no login is needed.
 - Plugin installed but skills don't show → `/reload-plugins`, or restart.
-- `claude` not found in an editor's shell → use the `/mcp` route in Step 2 instead of the login command.
+- `claude mcp login` errors with "stdin isn't a terminal" → don't run it through your shell tool. Use `/mcp` → **Authenticate** (Step 3).
 - Sign-in fails → `claude mcp logout plugin:sales-call-review:<recorder>`, then sign in again.
 
 ---
@@ -98,19 +98,25 @@ In the same message that confirms the install:
 
 Record `RECORDER` and `SCOPE`. Neither recorder? Tell them they can paste any transcript and say "grade this call" after `/reload-plugins`, and stop.
 
-### Step 3: Connect the recorder (you start it, they sign in)
+### Step 3: Load the plugin and connect the recorder
 
-Run in the background (it waits for them):
+The plugin's connector only shows up in `/mcp` once the plugin is loaded, so this is where the one reload goes. Say:
 
-```bash
-claude mcp login plugin:sales-call-review:{recorder}
-```
+> "Now let's connect {Recorder}. Two quick things to type in the Claude message box:
+> 1. **`/reload-plugins`**: this loads Sales Call Review.
+> 2. **`/mcp`**: then choose **`plugin:sales-call-review:{recorder}`** → **Authenticate**. A browser tab opens: sign in to {Recorder} with the account that records your sales calls and click **Allow**.
+>
+> Then come back and say **done**."
 
-Say:
+This works the same in the desktop app's Code tab, VS Code, Cursor and the terminal.
 
-> "A browser tab just opened. **Sign in to {Recorder} with the account that records your sales calls, and click Allow.** Then say done."
+**Never run `claude mcp login` through your own shell tool.** It needs a real terminal and fails with "stdin isn't a terminal" in the desktop app and editors.
 
-If no browser opens, or `claude` isn't on the PATH in their editor: "Type **`/mcp`**, choose **`plugin:sales-call-review:{recorder}`**, then **Authenticate**, and sign in."
+**Fallback, only if the connector isn't in `/mcp` or Authenticate fails:** ask "Want me to open a terminal window for the sign-in?" and then:
+- **macOS:** `osascript -e 'tell application "Terminal" to activate' -e 'tell application "Terminal" to do script "claude mcp login plugin:sales-call-review:{recorder}"'`
+- **Windows:** `start cmd /k claude mcp login plugin:sales-call-review:{recorder}`
+- **Linux:** ask them to open a terminal and paste `claude mcp login plugin:sales-call-review:{recorder}`.
+After signing in there, they type `/mcp` → **Reconnect** on that connector.
 
 [VERIFY]
 
@@ -118,7 +124,7 @@ If no browser opens, or `claude` isn't on the PATH in their editor: "Type **`/mc
 claude mcp list 2>&1 | grep "sales-call-review:{recorder}"
 ```
 
-Shows **Connected** → "**{Recorder}'s connected.** That was the hard part." Still "Needs authentication" → run `claude mcp logout plugin:sales-call-review:{recorder}`, then Step 3 again.
+Shows **Connected** → "**{Recorder}'s connected.** That was the hard part." Still "Needs authentication" → have them try `/mcp` → **Authenticate** again, or use the fallback.
 
 ### Step 4: Save the setup
 
@@ -136,7 +142,7 @@ End with exactly this, and nothing after it:
 
 > "**You're all set ✅**
 >
-> **Last step:** type **`/reload-plugins`** so the plugin loads, then say **"review last week's sales calls."**
+> **Last step:** say **"review last week's sales calls."**
 >
 > I'll show you the sales calls I found for each closer and you confirm. Then I grade every one and open your report: a team overview, a page per closer with their stats, the objections they lose to, exact quotes and what to say instead, plus a PDF for each closer."
 

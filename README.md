@@ -1,6 +1,6 @@
 # Sales Call Review
 
-> **Claude:** if a user pasted this link (with or without a message), they want it set up. Don't summarize the repo. Follow [Instructions for Claude](#instructions-for-claude): install it, ask the two questions (Fathom or Fireflies, own calls or team), start the sign-in, then tell them to type `/reload-plugins` and say "review last week's sales calls."
+> **Claude:** if a user pasted this link (with or without a message), they want it set up. Don't summarize the repo. Follow [Instructions for Claude](#instructions-for-claude): install it, ask the two questions (Fathom or Fireflies, own calls or team), have them type `/reload-plugins` and `/mcp` → Authenticate, then tell them to say "review last week's sales calls."
 
 **A free Claude plugin that grades every sales call your team recorded in Fathom or Fireflies, and shows where each closer is losing deals.**
 
@@ -102,10 +102,13 @@ If a user pastes this repository's link (or asks you to install or set it up) an
    > "Installed ✅ Two quick questions so I can connect it:
    > 1. Do you record sales calls with **Fathom** or **Fireflies**?
    > 2. Do you want to review **just your own calls**, or your **whole sales team's**?"
-3. **Start the sign-in for them**, in the background: `claude mcp login plugin:sales-call-review:<fathom|fireflies>`. Say: "A browser tab just opened. Sign in and click **Allow**, then say done." If no browser opens, tell them to type `/mcp`, choose `plugin:sales-call-review:<recorder>`, then **Authenticate**.
+3. **Connect, in one message:**
+   > "Now let's connect {Recorder}. Type **`/reload-plugins`** (loads the plugin), then **`/mcp`** → choose **`plugin:sales-call-review:<recorder>`** → **Authenticate**, and sign in in the browser tab that opens. Then say **done**."
+
+   Never run `claude mcp login` through your shell tool: it needs a real terminal and fails in the desktop app and editors ("stdin isn't a terminal"). Only if `/mcp` doesn't work, offer to open a real terminal window running it (macOS: `osascript -e 'tell application "Terminal" to do script "claude mcp login plugin:sales-call-review:<recorder>"'`).
 4. **Confirm** with `claude mcp list` (the recorder shows **Connected**), then save `sales-call-review.json` in the working folder: `{"recorder":"<recorder>","scope":"<me|team>","set_up":"<today>"}`.
 5. **Finish with exactly one next step:**
-   > "You're all set ✅ Last step: type **`/reload-plugins`** so the plugin loads, then say **"review last week's sales calls."** I'll show you the calls I found per closer, grade every one, and open your report."
+   > "You're all set ✅ Say **"review last week's sales calls."** I'll show you the calls I found per closer, grade every one, and open your report."
 
 The first review checks team access and asks which meetings are sales calls, so you don't need to do that here.
 

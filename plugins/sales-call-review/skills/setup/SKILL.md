@@ -48,31 +48,29 @@ If the recorder's tools already work (Fathom: list-meetings / get-transcript too
 
 ### Path A: Claude Code (desktop app Code tab, VS Code, Cursor, terminal)
 
-Explain: "I'll open the {Recorder} sign-in page in your browser. Sign in with the account that records your sales calls and click **Allow**. That's all you need to do."
+Explain: "You'll sign in to {Recorder} once. It takes about 30 seconds."
 
-1. Run this yourself, **in the background** (it waits until they finish signing in):
+1. Tell them exactly this:
 
-```bash
-claude mcp login plugin:sales-call-review:{recorder}
-```
+> "In the Claude message box, type **`/mcp`** and press Enter. Choose **`plugin:sales-call-review:{recorder}`**, then **Authenticate**. A browser tab opens: sign in to {Recorder} with the account that records your sales calls, click **Allow**, then come back here and say **done**."
 
-2. Tell them: "A browser tab just opened. Sign in to {Recorder} and click **Allow** / **Authorize**, then come back here and say **done**."
-3. When they say done (or the command finishes), confirm:
+This works the same in the desktop app's Code tab, VS Code, Cursor and the terminal.
+
+2. When they say done, confirm:
 
 ```bash
 claude mcp list 2>&1 | grep "sales-call-review:{recorder}"
 ```
 
-It should say **Connected** (not "Needs authentication").
+It should say **Connected**.
 
-4. Load the connection into this conversation: tell them **type `/mcp`, choose `plugin:sales-call-review:{recorder}`, and pick Reconnect** if it isn't already shown as connected. (Or type `/reload-plugins`.)
+**Never run `claude mcp login` yourself through your shell tool.** It needs a real terminal and fails with "stdin isn't a terminal" in the desktop app and editors.
 
-**If the browser didn't open,** or they'd rather do it by hand:
-- **Desktop app (Code tab), VS Code or Cursor:** in the Claude message box, type `/mcp` and press Enter.
-- **Terminal:** type `/mcp` at the Claude prompt.
-- Then choose **`plugin:sales-call-review:{recorder}`** → **Authenticate**, and sign in in the browser.
-
-**If `claude` isn't found** (some editor setups don't put it on the PATH): use the `/mcp` route above.
+**Fallback, only if `/mcp` doesn't show the connector or Authenticate fails:** open a real terminal window running the sign-in. Ask first: "Want me to open a terminal window for the sign-in?"
+- **macOS:** `osascript -e 'tell application "Terminal" to activate' -e 'tell application "Terminal" to do script "claude mcp login plugin:sales-call-review:{recorder}"'`
+- **Windows:** `start cmd /k claude mcp login plugin:sales-call-review:{recorder}`
+- **Linux:** ask them to open a terminal and paste `claude mcp login plugin:sales-call-review:{recorder}`.
+Then have them type `/mcp` → **Reconnect** on that connector so this conversation picks it up.
 
 ### Path B: Claude app or claude.ai chat
 
@@ -93,8 +91,8 @@ Explain: "The plugin reads your calls through {Recorder}'s official connector. Y
 Call the recorder's **list meetings** tool for the **last 14 days**: metadata only, no transcripts, first page.
 
 - Meetings come back → "**{Recorder}'s connected.** That was the hard part." → Step 2.
-- Tools not available yet → Path A: have them do the `/mcp` → **Reconnect** step. Path B: start a new chat.
-- Auth error → "The sign-in didn't stick. Let's do it once more." Repeat Step 1 (Path A: `claude mcp logout plugin:sales-call-review:{recorder}` first, then login again).
+- Tools not available yet → Path A: have them type `/mcp` and pick **Reconnect** on `plugin:sales-call-review:{recorder}` (or `/reload-plugins`). Path B: start a new chat.
+- Auth error → "The sign-in didn't stick. Let's do it once more." Repeat Step 1 (Path A: `/mcp` → the connector → **Clear authentication** if offered, then **Authenticate** again; or use the terminal-window fallback).
 - Zero meetings → try 30 days. Still none → "I'm connected but see no meetings. Is this the {Recorder} account that records your sales calls?"
 
 ---
