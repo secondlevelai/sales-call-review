@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-"""Build the Sales Call Review report: one interactive HTML file + PDFs.
+"""Build the Sales Call Review report: one interactive, self-contained HTML file.
 
 Every number comes from aggregate.py. Claude only supplies the coaching words
 (optional coaching.json); without it, coaching is written from the numbers.
-Standard library only. PDFs are printed by a local Chrome/Edge/Chromium if one
-is installed; otherwise the HTML's "Save PDF" button does the same job.
+Standard library only.
 
 Usage:
   build_report.py SOURCE [--from YYYY-MM-DD] [--to YYYY-MM-DD]
                   [--coaching coaching.json] [--confirmed N] [--recorder fathom|fireflies]
-                  [--out DIR] [--no-pdf] [--open]
+                  [--out DIR] [--open]
 
 SOURCE is a ledger (graded-calls.json) or a file holding a list of graded calls.
-Writes DIR/report.html and DIR/pdf/Team.pdf + DIR/pdf/<Closer>.pdf.
+Writes DIR/report.html.
 Default DIR: ./sales-call-reports/<from>_to_<to>/
 """
 import argparse
@@ -21,10 +20,8 @@ import json
 import os
 import platform
 import re
-import shutil
 import subprocess
 import sys
-import urllib.parse
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -128,49 +125,6 @@ def build_data(rows, team_rows, coaching, meta):
 
 # ---------- output ----------
 
-def find_browser():
-    candidates = []
-    system = platform.system()
-    if system == "Darwin":
-        candidates += [
-            "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-            "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
-            "/Applications/Chromium.app/Contents/MacOS/Chromium",
-            "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
-        ]
-    elif system == "Windows":
-        for base in (os.environ.get("PROGRAMFILES", ""), os.environ.get("PROGRAMFILES(X86)", ""), os.environ.get("LOCALAPPDATA", "")):
-            if base:
-                candidates += [
-                    os.path.join(base, "Google", "Chrome", "Application", "chrome.exe"),
-                    os.path.join(base, "Microsoft", "Edge", "Application", "msedge.exe"),
-                ]
-    for name in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "microsoft-edge", "msedge", "chrome"):
-        p = shutil.which(name)
-        if p:
-            candidates.append(p)
-    for c in candidates:
-        if c and os.path.exists(c):
-            return c
-    return None
-
-
-def safe_name(name):
-    return re.sub(r"[^A-Za-z0-9._ -]+", "", name).strip().replace(" ", "-") or "rep"
-
-
-def print_pdf(browser, html_path, view, out_pdf):
-    url = html_path.resolve().as_uri() + "?" + urllib.parse.urlencode({"view": view, "print": "1"})
-    cmd = [browser, "--headless=new", "--disable-gpu", "--no-pdf-header-footer", "--hide-scrollbars",
-           "--run-all-compositor-stages-before-draw", "--virtual-time-budget=4000",
-           f"--print-to-pdf={out_pdf}", url]
-    try:
-        subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=90, check=False)
-    except (subprocess.TimeoutExpired, OSError):
-        return False
-    return out_pdf.exists() and out_pdf.stat().st_size > 1000
-
-
 def open_file(path):
     system = platform.system()
     try:
@@ -194,7 +148,6 @@ def main():
     p.add_argument("--confirmed", type=int, help="How many sales calls were confirmed for grading (for 'Graded X of Y')")
     p.add_argument("--recorder", default="")
     p.add_argument("--out")
-    p.add_argument("--no-pdf", action="store_true")
     p.add_argument("--open", action="store_true", help="Open the HTML report when done")
     a = p.parse_args()
 
@@ -235,23 +188,6 @@ def main():
     html_path = out / "report.html"
     html_path.write_text(html, encoding="utf-8")
     print(f"report: {html_path.resolve()}")
-
-    pdfs = []
-    if not a.no_pdf:
-        browser = find_browser()
-        if browser:
-            (out / "pdf").mkdir(exist_ok=True)
-            views = ([] if a.closer else [("team", "Team")]) + [(f"rep:{r['name']}", r["name"]) for r in data["reps"]]
-            for view, label in views:
-                pdf = out / "pdf" / f"{safe_name(label)}.pdf"
-                if print_pdf(browser, html_path, view, pdf):
-                    pdfs.append(pdf)
-            for pdf in pdfs:
-                print(f"pdf: {pdf.resolve()}")
-            if not pdfs:
-                print("pdf: browser found but printing failed; use the report's Save PDF button", file=sys.stderr)
-        else:
-            print("pdf: no Chrome/Edge/Chromium found; open the report and use its Save PDF button for each view")
 
     if a.open:
         open_file(html_path)

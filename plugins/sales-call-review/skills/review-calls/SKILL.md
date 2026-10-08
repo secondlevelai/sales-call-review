@@ -30,13 +30,19 @@ List meetings for the range **without transcripts or summaries**, paging until e
 
 **First review (no `sales_call_rule` saved yet):** fold one question into the confirmation below. Show the meeting titles you're unsure about and ask: "Which of these are sales calls? Is there a naming pattern I can use next time (like 'Strategy Call')?" Then save the answer as `sales_call_rule` in `sales-call-review.json` (Claude Code / Cowork), so it's never asked again.
 
-Show one compact confirmation and wait for the answer:
+**Ask how many to grade.** There can be a lot of calls, so never start grading without this answer. Show one compact message and wait:
 
 ```
 Found 38 sales calls (Oct 1–7) · skipped 21 internal/short/duplicate meetings
 - Marcus Lee: 14   - Dev Patel: 13   - Ana Ruiz: 11
-Grade all 38? (Or name closers or calls to leave out.)
+
+How many should I grade?
+1. All 38
+2. The most recent 10 per closer (30 calls)
+3. Just certain closers or dates (tell me which)
 ```
+
+Adjust option 2 to the real numbers (if every closer has 10 or fewer, say so and offer only "all" or "pick"). Grade exactly what they choose.
 
 **Coverage check:** if every call belongs to the signed-in user but they asked about a team (or `sales-call-review.json` says `"scope": "team"`), give the "teammates' calls are missing" fix from the recorder reference, then offer to grade what is visible.
 
@@ -77,9 +83,9 @@ Use `--closer "Name"` for one closer and `--json` if you need the raw numbers. I
 
 ## 7. Build the report
 
-**When you can run code (Claude Code in the terminal, VS Code, Cursor or the desktop app; Cowork):** build the interactive HTML report and the PDFs.
+**When you can run code (Claude Code in the terminal, VS Code, Cursor or the desktop app; Cowork):** build the interactive HTML report.
 
-1. Write the coaching words to `coaching.json`, following `references/coaching.md` (team + one block per closer, written only from the `aggregate.py` numbers and real quotes).
+1. Write the coaching words to `coaching.json`, following `references/coaching.md` (team + one block per closer, written only from patterns in the `aggregate.py` numbers across all of their calls, plus real quotes).
 2. Run:
 
 ```bash
@@ -87,15 +93,15 @@ python3 ${CLAUDE_SKILL_DIR}/scripts/build_report.py graded-calls.json --from 202
   --coaching coaching.json --confirmed 38 --recorder fathom --open
 ```
 
-(Use `graded-batch.json` instead of the ledger if there isn't one. `--confirmed` is the number of sales calls the user confirmed. `--open` opens the report in their browser.)
+(Use `graded-batch.json` instead of the ledger if there isn't one. `--confirmed` is the number of calls the user chose to grade. `--open` opens the report in their browser.)
 
-It writes `sales-call-reports/<from>_to_<to>/report.html` plus `pdf/Team.pdf` and one `pdf/<Closer>.pdf` per closer, printed by the user's Chrome or Edge. If no browser is found it says so; the report's **Save PDF** button does the same thing.
+It writes `sales-call-reports/<from>_to_<to>/report.html`: a team overview plus a page per closer. Each page starts with a scrollable list of that person's calls (date, lead, length, score, outcome, and click for the full grade), then the overall findings across all of their calls.
 
 3. Reply in chat, short:
 
 ```
 Your report is open in your browser: sales-call-reports/2026-10-01_to_2026-10-07/report.html
-Graded 38 of 38 sales calls from Oct 1 to Oct 7 across 3 closers.
+Graded 30 of 30 sales calls from Oct 1 to Oct 7 across 3 closers.
 
 Biggest pattern: [team headline]
 
@@ -104,11 +110,10 @@ This week's three fixes:
 2. ...
 3. ...
 
-PDFs to send each closer: sales-call-reports/.../pdf/ (Team.pdf, Marcus-Lee.pdf, Dev-Patel.pdf, Ana-Ruiz.pdf)
-Click a closer in the left rail to see their page, or any call to see its full grade.
+Click a closer on the left to see their calls and their patterns. Click any call to open its full grade.
 ```
 
-**When you can't run code (claude.ai or Claude app chat):** write the report in the chat instead, following `references/report-template.md`: headline with a number, then this coverage line word for word with the real numbers: `Graded 38 of 38 sales calls from Oct 1 to Oct 7 across 3 closers.` (graded, then confirmed). Then the team table, a section per closer with exact quotes and "say this instead", objections, game film, mistakes, buyers-vs-not, three fixes, the collapsed results block, and the small "Built by @bingobuildsai" line. Mention once that the interactive report and PDFs are available when this runs in Claude Code or the desktop app's Code tab.
+**When you can't run code (claude.ai or Claude app chat):** write the report in the chat instead, following `references/report-template.md`: headline with a number, then this coverage line word for word with the real numbers: `Graded 38 of 38 sales calls from Oct 1 to Oct 7 across 3 closers.` (graded, then confirmed). Then the team table, a section per closer with exact quotes and "say this instead", objections, game film, mistakes, buyers-vs-not, three fixes, the collapsed results block, and the small "Built by @bingobuildsai" line. Mention once that the interactive report is available when this runs in Claude Code or the desktop app's Code tab.
 
 No pitch, links or promotion either way.
 

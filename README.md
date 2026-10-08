@@ -41,10 +41,9 @@ Then it offers to **run your first review**. Every week after that, just type **
 
 ### What you get
 
-- **An interactive report that opens in your browser.** Switch between the team overview and each closer: close rate, call score, cash per call, asked-for-the-sale rate, talk share, discovery time and paid-in-full rate, each compared to the team. Then the objections they lose to, the mistakes that cost deals, what the buyers had that the others didn't, and every call with its quotes and fixes.
-- **A PDF for each closer** (and one for the team) that you can send them.
+- **An interactive report that opens in your browser.** On the left: the team and each closer. Each page starts with a scrollable list of their calls (date, lead, length, score, closed or lost), and you click any call to open its full grade. Below that are the findings across all of their calls: close rate, call score, cash per call, how often they ask for the sale, talk share and discovery time (each compared to the team), what to work on, the objections they lose to, the mistakes that cost deals, and what the buyers had that the others didn't.
 
-The interactive report and PDFs are built on your computer, so they need Claude Code: the Claude desktop app's **Code** tab, VS Code, Cursor, or a terminal. In plain claude.ai chat, the report comes in the conversation instead.
+The interactive report is built on your computer, so they need Claude Code: the Claude desktop app's **Code** tab, VS Code, Cursor, or a terminal. In plain claude.ai chat, the report comes in the conversation instead.
 
 <details>
 <summary>Prefer to do it by hand?</summary>

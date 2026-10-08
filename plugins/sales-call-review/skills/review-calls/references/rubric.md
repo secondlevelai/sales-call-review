@@ -22,6 +22,7 @@ Write exactly these keys. No extra prose.
   "id": "recorder's meeting/transcript id",
   "src": "fathom | fireflies | pasted",
   "closer": "Closer's name",
+  "lead": "Lead's first name (or company), from the meeting or transcript",
   "date": "YYYY-MM-DD",
   "min": 42,
   "out": "closed | lost | not_pitched | dq | unknown",
@@ -44,6 +45,7 @@ Field meanings:
 
 | Key | Meaning |
 | --- | --- |
+| `lead` | The lead's name as it appears in the meeting title or transcript (first name is fine). Blank if unknown. |
 | `out` | `closed` = paid or committed on the call (PIF, plan, deposit). `lost` = pitched, didn't buy. `not_pitched` = showed but the offer was never presented. `dq` = disqualified. `unknown` = can't tell. |
 | `out_by` | `transcript` if you inferred the outcome from the call; `user` if the user gave it. |
 | `cash` | Cash collected in dollars, only if the user gave it. Otherwise `null`. |

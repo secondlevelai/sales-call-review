@@ -53,7 +53,8 @@
   "fix": [
    "When the partner comes up: \"Makes sense. Let's get her on a quick call tomorrow at 6 so she hears it from me. Does that work?\""
   ],
-  "pay": "none"
+  "pay": "none",
+  "lead": "Jordan Hayes"
  },
  {
   "id": "ff-102",
@@ -100,7 +101,8 @@
    "talk": 0.48
   },
   "fix": [],
-  "pay": "pif"
+  "pay": "pif",
+  "lead": "Priya Shah"
  },
  {
   "id": "ff-103",
@@ -151,7 +153,8 @@
    "Before any pitch: \"Walk me through where the business is today.\"",
    "On \"think about it\": \"What specifically do you need to think through? Let's do it now.\""
   ],
-  "pay": "none"
+  "pay": "none",
+  "lead": "Chris Moreno"
  },
  {
   "id": "ff-104",
@@ -194,7 +197,8 @@
    "talk": 0.7
   },
   "fix": [],
-  "pay": "plan"
+  "pay": "plan",
+  "lead": "Tasha Green"
  },
  {
   "id": "ff-105",
@@ -244,7 +248,8 @@
   "fix": [
    "After the case study: \"Do you want to get started today?\" Then stop talking."
   ],
-  "pay": "none"
+  "pay": "none",
+  "lead": "Ben Carter"
  },
  {
   "id": "ff-106",
@@ -290,6 +295,7 @@
    "talk": 0.5
   },
   "fix": [],
-  "pay": "plan"
+  "pay": "plan",
+  "lead": "Olivia Brooks"
  }
 ]

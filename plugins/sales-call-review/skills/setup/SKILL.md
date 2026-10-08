@@ -84,7 +84,7 @@ Explain: "The plugin reads your calls through {Recorder}'s official connector. Y
 
 **Not on the Connectors tab?** On Claude **Team or Enterprise** plans, an Owner must allow the connector first: they go to **Customize → Connectors**, add {Recorder}, and allow it. Then try again.
 
-> Tip for Path B: the interactive report and PDFs need Claude to run code. In the Claude **desktop app**, open the **Code** tab and run reviews there. In plain chat you'll get the report in the conversation instead.
+> Tip for Path B: the interactive report needs Claude to run code. In the Claude **desktop app**, open the **Code** tab and run reviews there. In plain chat you'll get the report in the conversation instead.
 
 ### [VERIFY]
 
@@ -155,7 +155,7 @@ Say:
 
 > "**You're set up.** 🎉
 >
-> Let's run your first review: every sales call from **last week**, graded. You'll get an **interactive report** that opens in your browser. Click between the team overview and each closer to see their stats, the objections they lose to, the mistakes that cost deals, exact quotes, and what to say instead. You also get a **PDF for each closer** that you can send them.
+> Let's run your first review: every sales call from **last week**, graded. You'll get an **interactive report** that opens in your browser: each closer's calls in a list you can scroll and click into, then their patterns across all of those calls (what to work on, the objections they lose to, the mistakes that cost deals, exact quotes and what to say instead).
 >
 > Want me to run it now?"
 
@@ -167,8 +167,8 @@ If not now → "Any time, just type **'Review last week's sales calls'**."
 
 ## YOUR WEEKLY ROUTINE (say this after the first review)
 
-- **Every Monday:** "Review last week's sales calls." New report, new PDFs.
-- **Before a one-on-one:** "Coach Marcus on his last 30 days." You get his page and PDF.
+- **Every Monday:** "Review last week's sales calls." A new report each time.
+- **Before a one-on-one:** "Coach Marcus on his last 30 days." You get his page.
 - **One call:** paste a transcript and say "grade this call."
 - **Dollar figures:** when I ask, paste each deal's result (closed or lost, cash, paid in full or plan). The report then ranks closers by **cash per call**, and the top of that list should get the most calls.
 

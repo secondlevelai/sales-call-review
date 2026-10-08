@@ -6,6 +6,7 @@ First run `aggregate.py report <file> --json` (and `--closer "Name"` for each cl
 
 ## Rules
 
+- **Coach the pattern across all of a closer's graded calls, never a single call.** The headline and every fix must describe something that repeats ("on 6 of 9 lost calls", "overcome 2 of 7 times"). A one-off moment isn't a fix; leave it for that call's own grade.
 - Lead with the pattern that costs the most deals, and quote its number ("on 6 of 8 lost calls", "overcome 20% of the time"). Never make up a number.
 - Each fix needs words the closer can actually say on the next call.
 - Use a real quote from that closer's graded calls (`obj[].q`, the lead's words) when one shows the problem. Copy it exactly.

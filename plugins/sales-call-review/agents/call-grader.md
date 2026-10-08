@@ -22,7 +22,7 @@ You grade one recorded sales call for a high-ticket coaching or info-product off
 ## Output
 
 ```
-{"id":"","src":"fathom|fireflies","closer":"","date":"YYYY-MM-DD","min":0,
+{"id":"","src":"fathom|fireflies","closer":"","lead":"","date":"YYYY-MM-DD","min":0,
  "out":"closed|lost|not_pitched|dq|unknown","out_by":"transcript","cash":null,"pay":"none","score":0,
  "sum":"one sentence","why":"one sentence: why they bought or the real reason they didn't",
  "obj":[{"t":"","q":"lead's exact words","r":"rep's reply","ok":false}],

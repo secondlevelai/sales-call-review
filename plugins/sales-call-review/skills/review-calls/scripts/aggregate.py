@@ -79,6 +79,7 @@ def normalize(c):
         "id": str(c.get("id", "")),
         "src": c.get("src", "pasted"),
         "closer": (c.get("closer") or "Unknown closer").strip(),
+        "lead": (c.get("lead") or "").strip(),
         "date": c.get("date") or "",
         "min": c.get("min"),
         "out": c.get("out", "unknown"),

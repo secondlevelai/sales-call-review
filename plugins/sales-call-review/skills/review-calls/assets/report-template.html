@@ -87,6 +87,22 @@ select{background:var(--surface2);color:var(--text);border:1px solid var(--borde
 .foot{color:var(--muted2);font-size:12px;margin-top:30px}
 .callcard{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:10px;page-break-inside:avoid;break-inside:avoid}
 .printonly{display:none}
+.calls-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{background:var(--surface2);box-shadow:inset 0 0 0 1px var(--border);border-radius:9px;padding:5px 10px;font-size:12.5px;color:var(--muted)}
+.stat b{color:var(--text);font-weight:600}
+.calllist{max-height:330px;overflow:auto;border:1px solid var(--border);border-radius:12px;background:var(--bg)}
+.crow{display:grid;grid-template-columns:64px minmax(0,1fr) 56px 52px 104px;gap:12px;padding:8px 14px;border-bottom:1px solid var(--border);align-items:center;font-size:13px;cursor:pointer}
+.crow.rep{grid-template-columns:64px 120px minmax(0,1fr) 56px 52px 104px}
+.crow:last-child{border-bottom:0}
+.crow:hover{background:var(--surface2)}
+.crow.hd{position:sticky;top:0;background:var(--surface);cursor:default;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);z-index:1}
+.crow.hd:hover{background:var(--surface)}
+.crow .s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
+.crow .s b{color:var(--text);font-weight:500}
+.crow .n{text-align:right;font-variant-numeric:tabular-nums}
+.sc{display:inline-block;min-width:34px;text-align:center;border-radius:7px;padding:1px 6px;font-weight:600;font-size:12.5px}
+.sc.hi{background:rgba(74,222,128,.14);color:var(--good)} .sc.mid{background:rgba(251,191,36,.14);color:var(--warn)} .sc.lo{background:rgba(248,113,113,.14);color:var(--bad)}
 @media (max-width:900px){.app{grid-template-columns:1fr}aside{position:static;height:auto}.grid2{grid-template-columns:1fr}main{padding:20px}}
 
 /* print: light, single view, everything expanded */
@@ -144,16 +160,14 @@ function rail(active){
   $("#rail").innerHTML = `<div class="brand">Sales Call <span>Review</span></div>
     <div class="range">${rangeText()}<br>${D.meta.graded} calls graded</div>
     <button class="nav ${active==="team"?"on":""}" data-view="team"><b>Team overview</b><small>${D.reps.length} closers</small></button>
-    <div class="navlbl">Closers</div>${reps}
-    <div class="navlbl">Calls</div>
-    <button class="nav ${active==="calls"?"on":""}" data-view="calls"><b>All calls</b><small>${D.calls.length} graded</small></button>`;
+    <div class="navlbl">Closers</div>${reps}`;
   $("#rail").querySelectorAll("[data-view]").forEach(b => b.onclick = () => go(b.dataset.view));
 }
 
 /* ---------- shared pieces ---------- */
 function topbar(title, sub){
   return `<div class="top"><div><div class="eyebrow">Sales Call Review · ${rangeText()}</div><h1>${title}</h1><div class="sub">${sub}</div></div>
-    <button class="btn" onclick="window.print()">Save PDF</button></div>`;
+    </div>`;
 }
 function kpi(label, value, delta, hint){
   return `<div class="kpi"><div class="l">${label}</div><div class="v">${value}</div>${delta?`<div class="d">${delta}</div>`:""}${hint?`<div class="d">${hint}</div>`:""}</div>`;
@@ -230,13 +244,41 @@ function payBlock(i){
   return `<div class="card"><h2>How closed deals paid</h2><div class="hint">${i.pif_rate!=null?`${pct(i.pif_rate)} paid in full. If most leads pay in full, the price may be too low.`:"Payment type wasn't said on these calls."}</div>
     ${Object.entries(mix).filter(([k,v])=>v).map(([k,v]) => `<div class="row"><div class="name">${esc(L.pay[k]||k)}</div><div class="bar"><i style="width:${W(v/total)}%"></i></div><div class="meta">${v}</div></div>`).join("")}</div>`;
 }
-function callsTable(calls, showRep=true){
-  if (!calls.length) return `<div class="empty">No calls.</div>`;
-  if (PRINT) return calls.map(callCard).join("");
-  return `<table><thead><tr><th>Date</th>${showRep?"<th>Closer</th>":""}<th>Lead / summary</th><th>Outcome</th><th class="n">Score</th><th class="n">Min</th></tr></thead><tbody>
-    ${calls.map(c => `<tr class="click" data-call="${esc(c.src+":"+c.id)}"><td>${fmtDate(c.date)}</td>${showRep?`<td>${esc(c.closer)}</td>`:""}<td>${esc(c.sum)}</td>
-      <td><span class="pill ${c.out}">${OUT[c.out]||c.out}</span>${c.out==="closed"&&c.pay&&c.pay!=="none"&&c.pay!=="unknown"?` <span class="pill">${esc(L.pay[c.pay])}</span>`:""}</td>
-      <td class="n">${num(c.score)}</td><td class="n">${num(c.min)}</td></tr>`).join("")}</tbody></table>`;
+function scoreClass(x){ return x==null ? "" : x >= 75 ? "hi" : x >= 50 ? "mid" : "lo"; }
+function callRows(calls, showRep){
+  if (!calls.length) return `<div class="crow" style="cursor:default"><span class="s">No calls match.</span></div>`;
+  return calls.map(c => `<div class="crow ${showRep?"rep":""}" data-call="${esc(c.src+":"+c.id)}" title="Open the full grade">
+    <span>${fmtDate(c.date)}</span>${showRep?`<span class="s"><b>${esc(c.closer)}</b></span>`:""}
+    <span class="s">${c.lead?`<b>${esc(c.lead)}</b> · `:""}${esc(c.sum)}</span>
+    <span class="n">${c.min!=null?num(c.min)+"m":"—"}</span>
+    <span class="n"><span class="sc ${scoreClass(c.score)}">${num(c.score)}</span></span>
+    <span><span class="pill ${c.out}">${OUT[c.out]||c.out}</span></span></div>`).join("");
+}
+function callList(calls, showRep){
+  const closed = calls.filter(c => c.out === "closed").length;
+  const avg = xs => { xs = xs.filter(x => x != null); return xs.length ? xs.reduce((a,b)=>a+b,0)/xs.length : null; };
+  const reps = [...new Set(calls.map(c => c.closer))];
+  return `<div class="card"><div class="calls-head"><div><h2>Calls</h2><div class="stats" style="margin-top:6px">
+      <span class="stat"><b>${calls.length}</b> graded</span><span class="stat"><b>${closed}</b> closed (${pct(calls.length?closed/calls.length:null)})</span>
+      <span class="stat">avg score <b>${num(avg(calls.map(c=>c.score)))}</b></span><span class="stat">avg length <b>${num(avg(calls.map(c=>c.min)))} min</b></span></div></div>
+    <div class="filters" style="margin:0">${showRep&&reps.length>1?`<select data-f="rep"><option value="">All closers</option>${reps.map(r=>`<option>${esc(r)}</option>`).join("")}</select>`:""}
+      <select data-f="out"><option value="">All outcomes</option>${Object.entries(OUT).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select>
+      <select data-f="sort"><option value="date">Newest first</option><option value="score">Lowest score first</option><option value="score_hi">Highest score first</option></select></div></div>
+    <div class="calllist" data-list><div class="crow hd ${showRep?"rep":""}"><span>Date</span>${showRep?"<span>Closer</span>":""}<span>Lead · what happened</span><span class="n">Length</span><span class="n">Score</span><span>Outcome</span></div>
+      <div data-rows>${callRows(calls, showRep)}</div></div>
+    <div class="note">Click a call to open its full grade. Everything below is the pattern across ${calls.length===1?"this call":"all "+calls.length+" calls"}, not any single call.</div></div>`;
+}
+function bindCallList(root, calls, showRep){
+  const box = root.querySelector("[data-list]"); if (!box) return;
+  const card = box.closest(".card");
+  const apply = () => {
+    const f = k => (card.querySelector(`[data-f="${k}"]`)||{}).value || "";
+    let list = calls.filter(c => (!f("rep") || c.closer === f("rep")) && (!f("out") || c.out === f("out")));
+    if (f("sort") === "score") list = [...list].sort((a,b) => (a.score??0)-(b.score??0));
+    if (f("sort") === "score_hi") list = [...list].sort((a,b) => (b.score??0)-(a.score??0));
+    card.querySelector("[data-rows]").innerHTML = callRows(list, showRep); bindCalls(card);
+  };
+  card.querySelectorAll("[data-f]").forEach(sel => sel.onchange = apply);
 }
 function bindCalls(root){
   root.querySelectorAll("[data-call]").forEach(tr => tr.onclick = () => openCall(tr.dataset.call));
@@ -287,6 +329,7 @@ function bindLeaderboard(){
 function teamView(){
   const t = D.team, m = D.meta, c = D.team_coaching;
   return topbar(m.single_closer ? esc(m.single_closer) : "Team overview", `Graded ${m.graded} of ${m.confirmed} sales calls${m.recorder?` from ${esc(m.recorder[0].toUpperCase()+m.recorder.slice(1))}`:""} across ${D.reps.length} closer${D.reps.length>1?"s":""}. Generated ${esc(m.generated)}.`) + `
+  ${callList(D.calls, true)}
   <div class="card headline"><div class="eyebrow">The biggest pattern this period</div><p>${esc(c.headline)}</p>${outcomeNote()}</div>
   <div class="kpis">
     ${kpi("Calls graded", `${m.graded}<span style="color:var(--muted2);font-size:15px"> / ${m.confirmed}</span>`)}
@@ -311,7 +354,6 @@ function teamView(){
     <div class="card"><h2>Questions leads ask</h2><div class="hint">Answer these before they're asked.</div>${questionsBlock(t)}</div>
     ${payBlock(t) || '<div></div>'}
   </div>
-  ${PRINT ? "" : `<div class="card noprint"><h2>All calls</h2><div class="hint">Click a call to see its full grade.</div>${callsTable(D.calls.slice(0,12))}${D.calls.length>12?`<div class="note"><a href="#" onclick="go('calls');return false">See all ${D.calls.length} calls →</a></div>`:""}</div>`}
   <div class="foot">Built by @bingobuildsai</div>`;
 }
 
@@ -320,6 +362,7 @@ function repView(name){
   const i = r.insights, t = D.team, s = r.summary, c = r.coaching;
   const calls = D.calls.filter(x => x.closer === name);
   return topbar(esc(name), `${s.calls} graded call${s.calls>1?"s":""} · ${rangeText()}`) + `
+  ${callList(calls, false)}
   <div class="card headline"><div class="eyebrow">Coaching for ${esc(name)}</div><p>${esc(c.headline)}</p>${s.calls<3?`<div class="note">With fewer than 3 calls, treat this as what happened on these calls, not a pattern.</div>`:""}</div>
   <div class="kpis">
     ${kpi("Close rate", pct(s.close_rate), vsTeam(s.close_rate, t.close_rate))}
@@ -331,39 +374,22 @@ function repView(name){
     ${kpi("Discovery before pitch", s.avg_discovery==null?"—":num(s.avg_discovery,1)+" min", vsTeam(s.avg_discovery, t.avg_discovery, "num"))}
     ${s.pif_rate!=null?kpi("Paid in full", pct(s.pif_rate), vsTeam(s.pif_rate, t.pif_rate)):""}
   </div>
-  <div class="card"><h2>What to work on</h2><div class="hint">The patterns costing ${esc(name)} deals, with words for the next call.</div>${fixes(c)}${keepDoing(c)}</div>
-  <div class="card"><h2>Objections</h2><div class="hint">${esc(name)}'s numbers, with the team's for comparison.</div>${objectionsBlock(i, t)}</div>
+  <div class="card"><h2>What to work on</h2><div class="hint">Patterns across ${esc(name)}'s ${s.calls} calls that are costing deals, with words for the next call.</div>${fixes(c)}${keepDoing(c)}</div>
+  <div class="card"><h2>Objections ${esc(name)} faced</h2><div class="hint">Across all ${s.calls} calls: how often each came up and how often ${esc(name)} got past it, with the team for comparison.</div>${objectionsBlock(i, t)}</div>
   <div class="grid2">
     <div class="card"><h2>Mistakes that cost deals</h2><div class="hint">On ${esc(name)}'s lost vs closed calls.</div>${mistakesBlock(i, t)}</div>
     <div class="card"><h2>Their buyers vs non-buyers</h2><div class="hint">What was different on the calls that closed.</div>${signalsBlock(i)}</div>
   </div>
-  <div class="card"><h2>${esc(name)}'s calls</h2><div class="hint">${PRINT?"Every graded call with its quotes and fixes.":"Click a call to see its full grade."}</div>${callsTable(calls, false)}</div>
   <div class="foot">Built by @bingobuildsai</div>`;
-}
-
-function callsView(){
-  const reps = [...new Set(D.calls.map(c => c.closer))];
-  return topbar("All calls", `${D.calls.length} graded calls · ${rangeText()}`) + `
-  <div class="card"><div class="filters"><select id="fRep"><option value="">All closers</option>${reps.map(r=>`<option>${esc(r)}</option>`).join("")}</select>
-    <select id="fOut"><option value="">All outcomes</option>${Object.entries(OUT).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select>
-    <select id="fSort"><option value="date">Newest first</option><option value="score">Lowest score first</option></select></div>
-  <div id="callwrap">${callsTable(D.calls)}</div></div><div class="foot">Built by @bingobuildsai</div>`;
-}
-function bindCallFilters(){
-  const apply = () => {
-    let list = D.calls.filter(c => (!$("#fRep").value || c.closer === $("#fRep").value) && (!$("#fOut").value || c.out === $("#fOut").value));
-    if ($("#fSort").value === "score") list = [...list].sort((a,b) => (a.score??0)-(b.score??0));
-    $("#callwrap").innerHTML = callsTable(list); bindCalls($("#callwrap"));
-  };
-  ["#fRep","#fOut","#fSort"].forEach(s => $(s).onchange = apply);
 }
 
 function go(view, push=true){
   const main = $("#main");
   if (view.startsWith("rep:")) main.innerHTML = repView(view.slice(4));
-  else if (view === "calls") main.innerHTML = callsView();
   else { view = "team"; main.innerHTML = teamView(); }
-  rail(view); bindCalls(main); bindLeaderboard(); if (view === "calls") bindCallFilters();
+  rail(view); bindCalls(main); bindLeaderboard();
+  const listCalls = view.startsWith("rep:") ? D.calls.filter(c => c.closer === view.slice(4)) : D.calls;
+  bindCallList(main, listCalls, !view.startsWith("rep:"));
   document.title = (view.startsWith("rep:") ? view.slice(4) + " · " : "") + "Sales Call Review";
   if (push && !PRINT) history.replaceState(null, "", "?view=" + encodeURIComponent(view));
   window.scrollTo(0,0);

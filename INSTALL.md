@@ -1,10 +1,10 @@
 # Sales Call Review: Guided Installer
 
-> A free Claude plugin from Second Level AI. Grades every sales call your team recorded in Fathom or Fireflies and gives you an interactive report of where each closer is losing deals, plus a PDF for each closer.
+> A free Claude plugin from Second Level AI. Grades every sales call your team recorded in Fathom or Fireflies and gives you an interactive report of where each closer is losing deals.
 
 <!-- MODULE METADATA
 module: sales-call-review
-version: v1.3.2
+version: v1.4.0
 status: RELEASED
 released: 2026-10-08
 requires: [claude-paid-plan, fathom-or-fireflies]
@@ -53,7 +53,7 @@ We're setting up **Sales Call Review**. When we're done, you'll say "review last
 - **An interactive report in your browser.** Click between the team overview and each closer. You'll see close rate, call score, cash per call, how often they ask for the sale, talk share, discovery time, and paid-in-full rate, each compared to the team.
 - **Where each closer is losing deals**: the objections they don't get past ("think about it", partner, price, "tried this before"…), the mistakes that show up on lost calls but not closed ones, and what the buyers had that the others didn't.
 - **Exact quotes from the calls and what to say instead**, plus your team's best real answer to each objection.
-- **A PDF for each closer** you can send them, and a team PDF.
+- **Every call in a scrollable list** per closer (date, lead, length, score, outcome). Click one to open its full grade.
 
 **Setup time:** 5–10 minutes
 **Cost:** Free. It runs on your Claude plan. No API keys.
@@ -66,7 +66,6 @@ We're setting up **Sales Call Review**. When we're done, you'll say "review last
 - **A paid Claude plan** (Pro, Max, Team or Enterprise). Connectors need one.
 - **Fathom or Fireflies** recording the sales calls, with transcripts on.
 - **Path A:** `claude --version` works.
-- **For PDFs:** Google Chrome, Microsoft Edge or Chromium. Most computers have one. Without it, the report's **Save PDF** button does the same.
 
 Don't stop to ask about these. Mention them only if something fails.
 
@@ -144,7 +143,7 @@ End with exactly this, and nothing after it:
 >
 > **Last step:** say **"review last week's sales calls."**
 >
-> I'll show you the sales calls I found for each closer and you confirm. Then I grade every one and open your report: a team overview, a page per closer with their stats, the objections they lose to, exact quotes and what to say instead, plus a PDF for each closer."
+> I'll show you how many sales calls I found per closer and ask how many to grade. Then I open your report: a team overview and a page per closer, each with their calls in a list and their patterns across all of them.
 
 That's the end of install. The **review-calls** skill takes over when they ask for the review. On the first run it checks team access and asks which meetings count as sales calls.
 
@@ -158,14 +157,14 @@ You can't install from a chat message. Give the clicks:
 2. Open its **Connectors** tab → **Connect** on **Fathom** or **Fireflies** → sign in → **Allow**. On Claude Team or Enterprise, an Owner may need to allow the connector first under **Customize → Connectors**.
 3. Start a new chat and say **"review last week's sales calls."**
 
-Tell them the interactive report and PDFs need Claude to run code: in the Claude **desktop app**, use the **Code** tab. In plain chat the report comes in the conversation.
+Tell them the interactive report needs Claude to run code: in the Claude **desktop app**, use the **Code** tab. In plain chat the report comes in the conversation.
 
 ---
 
 ## WEEKLY WORKFLOW
 
-- **Every Monday:** "Review last week's sales calls." New report, new PDFs, in `sales-call-reports/`.
-- **Before a one-on-one:** "Coach Marcus on his last 30 days." You get his page and PDF.
+- **Every Monday:** "Review last week's sales calls." A new report each time, in `sales-call-reports/`.
+- **Before a one-on-one:** "Coach Marcus on his last 30 days." You get his page.
 - **One call:** paste a transcript and say "grade this call."
 - **Dollar figures:** paste each deal's result (closed or lost, cash, paid in full or plan) when asked. Closers are then ranked by **cash per call**, and the top of that list should get the most calls.
 - Calls already graded are tracked in `graded-calls.json` and never graded twice.
@@ -176,7 +175,7 @@ Tell them the interactive report and PDFs need Claude to run code: in the Claude
 ## WHAT'S NEXT
 
 1. **Walk the team through the report** on Monday. Open it, click each closer, and play the game-film answers.
-2. **Send each closer their PDF** with one fix to work on this week.
+2. **Give each closer one fix** from their page to work on this week.
 3. **Coach one closer a week:** "Coach [name]" before each one-on-one.
 
 ---
