@@ -7,9 +7,6 @@ You get the objections each closer doesn't get past, the mistakes that show up o
 > "Leads who say 'let me think about it' close 9% of the time. It came up on 14 of 41 calls, and two closers accept it and end the call."
 > That's the kind of headline you get, from your own calls.
 
-<!-- 90-second setup video: replace with your Loom link -->
-**[Watch the 90-second setup](LOOM_LINK_HERE)**
-
 ---
 
 ## Set it up in 3 steps
