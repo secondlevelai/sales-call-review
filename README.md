@@ -102,7 +102,15 @@ If a user pastes this repository's link (or asks you to install or set it up) an
    > 1. Do you record sales calls with **Fathom** or **Fireflies**?
    > 2. Do you want to review **just your own calls**, or your **whole sales team's**?"
 3. **Connect, in one message:**
-   > "Now let's connect {Recorder}. Type **`/reload-plugins`** (loads the plugin), then **`/mcp`** → choose **`plugin:sales-call-review:<recorder>`** → **Authenticate**, and sign in in the browser tab that opens. Then say **done**."
+   > "Now let's connect {Recorder}. In the Claude message box:
+   > 1. Type **/reload-plugins** and press **Enter**. This loads Sales Call Review.
+   > 2. Type **/mcp** and press **Enter**.
+   > 3. Choose the **{Recorder}** one, listed as **sales-call-review:{recorder}**. Click it, or use the arrow keys and press **Enter**.
+   > 4. Choose **Authenticate** and press **Enter**. A browser tab opens: sign in to {Recorder} and click **Allow**.
+   >
+   > Then come back here, type **done** and press **Enter**."
+
+   Use exactly these numbered steps, including "press **Enter**" on each one.
 
    Never run `claude mcp login` through your shell tool: it needs a real terminal and fails in the desktop app and editors ("stdin isn't a terminal"). Only if `/mcp` doesn't work, offer to open a real terminal window running it (macOS: `osascript -e 'tell application "Terminal" to do script "claude mcp login plugin:sales-call-review:<recorder>"'`).
 4. **Confirm** with `claude mcp list` (the recorder shows **Connected**), then save `sales-call-review.json` in the working folder: `{"recorder":"<recorder>","scope":"<me|team>","set_up":"<today>"}`.

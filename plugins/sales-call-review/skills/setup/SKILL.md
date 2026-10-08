@@ -52,7 +52,15 @@ Explain: "You'll sign in to {Recorder} once. It takes about 30 seconds."
 
 1. Tell them exactly this:
 
-> "In the Claude message box, type **`/mcp`** and press Enter. Choose **`plugin:sales-call-review:{recorder}`**, then **Authenticate**. A browser tab opens: sign in to {Recorder} with the account that records your sales calls, click **Allow**, then come back here and say **done**."
+> "Let's connect {Recorder}. In the Claude message box:
+>
+> 1. Type **/mcp** and press **Enter**.
+> 2. Choose the **{Recorder}** one, listed as **sales-call-review:{recorder}**. Click it, or use the arrow keys and press **Enter**.
+> 3. Choose **Authenticate** and press **Enter**. A browser tab opens: sign in to {Recorder} and click **Allow**.
+>
+> Then come back here, type **done** and press **Enter**."
+
+(If the plugin was installed earlier in this same conversation, add a first step: "Type **/reload-plugins** and press **Enter**." Use these numbered steps as written, including "press **Enter**" on each one.)
 
 This works the same in the desktop app's Code tab, VS Code, Cursor and the terminal.
 

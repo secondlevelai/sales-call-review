@@ -4,7 +4,7 @@
 
 <!-- MODULE METADATA
 module: sales-call-review
-version: v1.4.0
+version: v1.4.1
 status: RELEASED
 released: 2026-10-08
 requires: [claude-paid-plan, fathom-or-fireflies]
@@ -101,11 +101,14 @@ Record `RECORDER` and `SCOPE`. Neither recorder? Tell them they can paste any tr
 
 The plugin's connector only shows up in `/mcp` once the plugin is loaded, so this is where the one reload goes. Say:
 
-> "Now let's connect {Recorder}. Two quick things to type in the Claude message box:
-> 1. **`/reload-plugins`**: this loads Sales Call Review.
-> 2. **`/mcp`**: then choose **`plugin:sales-call-review:{recorder}`** → **Authenticate**. A browser tab opens: sign in to {Recorder} with the account that records your sales calls and click **Allow**.
+> "Now let's connect {Recorder}. In the Claude message box:
 >
-> Then come back and say **done**."
+> 1. Type **/reload-plugins** and press **Enter**. This loads Sales Call Review.
+> 2. Type **/mcp** and press **Enter**.
+> 3. Choose the **{Recorder}** one, listed as **sales-call-review:{recorder}**. Click it, or use the arrow keys and press **Enter**.
+> 4. Choose **Authenticate** and press **Enter**. A browser tab opens: sign in to {Recorder} and click **Allow**.
+>
+> Then come back here, type **done** and press **Enter**."
 
 This works the same in the desktop app's Code tab, VS Code, Cursor and the terminal.
 
