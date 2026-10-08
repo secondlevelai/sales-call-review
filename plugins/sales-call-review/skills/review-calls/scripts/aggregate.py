@@ -41,6 +41,9 @@ STRENGTHS = OrderedDict([
     ("handled_price", "Held firm on price"), ("urgency", "Built real urgency"),
     ("next_steps", "Clear next steps"), ("rapport", "Strong rapport"), ("proof", "Used a relevant case study"),
 ])
+PAY_TYPES = ("pif", "plan", "deposit", "financing", "none", "unknown")
+PAY_LABELS = {"pif": "Paid in full", "plan": "Payment plan", "deposit": "Deposit", "financing": "Financing", "unknown": "Not said"}
+
 SAY_INSTEAD = {
     "no_ask": "“Based on everything you told me, this is exactly what you need. Do you want to get started today?” Then stop talking.",
     "skipped_discovery": "Before any pitch: “Walk me through where the business is today, where you want it in 12 months, and what's stopping you.” Spend 10+ minutes here.",
@@ -81,6 +84,7 @@ def normalize(c):
         "out": c.get("out", "unknown"),
         "out_by": c.get("out_by", "transcript"),
         "cash": c.get("cash"),
+        "pay": c.get("pay") if c.get("pay") in PAY_TYPES else ("unknown" if c.get("out") == "closed" else "none"),
         "score": c.get("score"),
         "sum": c.get("sum", ""),
         "why": c.get("why", ""),
@@ -208,9 +212,19 @@ def insights(rows, team_rows=None):
         ("Objections raised per call", "num", mean(won, lambda r: len(r["obj"])), mean(lost, lambda r: len(r["obj"]))),
     ]
 
+    pay_known = [r for r in won if r["pay"] in ("pif", "plan", "deposit", "financing")]
+    pay_mix = {k: sum(1 for r in won if r["pay"] == k) for k in ("pif", "plan", "deposit", "financing", "unknown")}
+    cash_rows = [r for r in rows if r["out_by"] == "user"]
     return {
         "calls": len(rows),
         "closed": len(won),
+        "lost": sum(1 for r in rows if r["out"] == "lost"),
+        "not_pitched": sum(1 for r in rows if r["out"] == "not_pitched"),
+        "pif_rate": rate(sum(1 for r in pay_known if r["pay"] == "pif"), len(pay_known)),
+        "pay_mix": pay_mix,
+        "cash_per_call": (sum(cash_known) / len(cash_rows)) if cash_known and cash_rows else None,
+        "avg_deal": avg_deal,
+        "avg_discovery": avg([r["sig"]["disc"] for r in rows]),
         "close_rate": rate(len(won), len(rows)),
         "outcome_from_user": sum(1 for r in rows if r["out_by"] == "user"),
         "cash": sum(cash_known) if cash_known else None,
@@ -248,6 +262,7 @@ def closer_table(rows):
         out.append({
             "closer": name, "calls": i["calls"], "close_rate": i["close_rate"], "avg_score": i["avg_score"],
             "ask_rate": i["ask_rate"], "talk_ratio": i["talk_ratio"], "overcome_rate": i["overcome_rate"],
+            "pif_rate": i["pif_rate"], "cash": i["cash"], "cash_per_call": i["cash_per_call"], "avg_discovery": i["avg_discovery"],
             "top_mistake": i["mistakes"][0]["label"] if i["mistakes"] and i["mistakes"][0]["cost"] > 0 else None,
             "weakest_objection": weakest[0]["label"] if weakest else None,
             "insights": i,

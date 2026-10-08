@@ -22,7 +22,7 @@ You need a paid Claude plan (Pro, Max, Team or Enterprise) and Fathom or Firefli
 3. Paste **`secondlevelai/sales-call-review`** and click **Add**.
 4. Install **Sales Call Review**.
 
-**In Claude Code:** paste this repo's link into a session and say **"read INSTALL.md and set this up."** Claude installs it and walks you through the rest.
+**In Claude Code:** paste this repo's link into a session (desktop app **Code** tab, VS Code, Cursor or terminal) and say **"set this up."** Claude installs it, opens the Fathom or Fireflies sign-in for you, and walks you through the rest.
 
 ### 2. Start a new chat and type
 
@@ -35,12 +35,19 @@ Claude walks you through the rest one step at a time (about 5 minutes):
 3. **Define what a sales call is,** so internal meetings and coaching calls are never graded.
 4. **Grade one real call as a test,** so you see exactly what you'll get.
 
-Then every week, just type **"Review last week's sales calls."**
+Then it offers to **run your first review**. Every week after that, just type **"Review last week's sales calls."**
+
+### What you get
+
+- **An interactive report that opens in your browser.** Switch between the team overview and each closer: close rate, call score, cash per call, asked-for-the-sale rate, talk share, discovery time and paid-in-full rate, each compared to the team. Then the objections they lose to, the mistakes that cost deals, what the buyers had that the others didn't, and every call with its quotes and fixes.
+- **A PDF for each closer** (and one for the team) that you can send them.
+
+The interactive report and PDFs are built on your computer, so they need Claude Code: the Claude desktop app's **Code** tab, VS Code, Cursor, or a terminal. In plain claude.ai chat, the report comes in the conversation instead.
 
 <details>
 <summary>Prefer to do it by hand?</summary>
 
-1. **Customize → Plugins → Sales Call Review → Connectors**, then click **Connect** on **Fathom** or **Fireflies** and sign in. (In Claude Code: `/mcp`, then select the recorder and **Authenticate**.)
+1. **Claude app chat:** **Customize → Plugins → Sales Call Review → Connectors**, then click **Connect** on **Fathom** or **Fireflies** and sign in. **Claude Code** (desktop app Code tab, VS Code, Cursor, terminal): type `/mcp`, choose `plugin:sales-call-review:fathom` (or `fireflies`), then **Authenticate**.
 2. To review your whole team, see [Fathom setup](docs/setup-fathom.md) or [Fireflies setup](docs/setup-fireflies.md).
 3. On a Claude Team or Enterprise plan, an Owner may need to allow the Fathom or Fireflies connector first.
 4. Type **"Review last week's sales calls."**

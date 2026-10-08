@@ -52,9 +52,9 @@ Grading rules that matter most (full rules in the rubric): tag only what is clea
 
 After grading, ask once:
 
-> "Want dollar figures? Paste each deal's result (name or date, closed/lost, cash), or say skip and I'll use what was said on the calls."
+> "Want dollar figures? Paste each deal's result (name or date, closed/lost, cash, and paid in full / plan / deposit / financing), or say skip and I'll use what was said on the calls. With cash, the report ranks closers by cash per call."
 
-If they paste results, set `out` and `cash` from them and `out_by: "user"`. If they skip, keep the transcript outcome (`out_by: "transcript"`).
+If they paste results, set `out`, `cash` and `pay` from them and `out_by: "user"`. If they skip, keep the transcript outcome (`out_by: "transcript"`).
 
 ## 6. Count exactly
 
@@ -73,11 +73,44 @@ python3 ${CLAUDE_SKILL_DIR}/scripts/aggregate.py report graded-calls.json --from
 
 Use `--closer "Name"` for one closer and `--json` if you need the raw numbers. If no code tool can run here, count by hand from the JSON and say "Counted by hand" under the headline.
 
-## 7. Write the report
+## 7. Build the report
 
-Follow `references/report-template.md` exactly: headline with a number, then this coverage line word for word with the real numbers: `Graded 38 of 38 sales calls from Oct 1 to Oct 7 across 3 closers.` (the first number is calls graded, the second is calls confirmed). Then the team table, a section per closer with exact quotes and "say this instead", the objection table, game film (the team's best real answers), mistakes, buyers-vs-not, three fixes, the collapsed results block, and the small "Built by @bingobuildsai" line. No pitch, links or promotion.
+**When you can run code (Claude Code in the terminal, VS Code, Cursor or the desktop app; Cowork):** build the interactive HTML report and the PDFs.
 
-The results block lists one line per graded call (`src:id|closer|date|out|score`) so the next review can skip them.
+1. Write the coaching words to `coaching.json`, following `references/coaching.md` (team + one block per closer, written only from the `aggregate.py` numbers and real quotes).
+2. Run:
+
+```bash
+python3 ${CLAUDE_SKILL_DIR}/scripts/build_report.py graded-calls.json --from 2026-10-01 --to 2026-10-07 \
+  --coaching coaching.json --confirmed 38 --recorder fathom --open
+```
+
+(Use `graded-batch.json` instead of the ledger if there isn't one. `--confirmed` is the number of sales calls the user confirmed. `--open` opens the report in their browser.)
+
+It writes `sales-call-reports/<from>_to_<to>/report.html` plus `pdf/Team.pdf` and one `pdf/<Closer>.pdf` per closer, printed by the user's Chrome or Edge. If no browser is found it says so; the report's **Save PDF** button does the same thing.
+
+3. Reply in chat, short:
+
+```
+Your report is open in your browser: sales-call-reports/2026-10-01_to_2026-10-07/report.html
+Graded 38 of 38 sales calls from Oct 1 to Oct 7 across 3 closers.
+
+Biggest pattern: [team headline]
+
+This week's three fixes:
+1. ...
+2. ...
+3. ...
+
+PDFs to send each closer: sales-call-reports/.../pdf/ (Team.pdf, Marcus-Lee.pdf, Dev-Patel.pdf, Ana-Ruiz.pdf)
+Click a closer in the left rail to see their page, or any call to see its full grade.
+```
+
+**When you can't run code (claude.ai or Claude app chat):** write the report in the chat instead, following `references/report-template.md`: headline with a number, then this coverage line word for word with the real numbers: `Graded 38 of 38 sales calls from Oct 1 to Oct 7 across 3 closers.` (graded, then confirmed). Then the team table, a section per closer with exact quotes and "say this instead", objections, game film, mistakes, buyers-vs-not, three fixes, the collapsed results block, and the small "Built by @bingobuildsai" line. Mention once that the interactive report and PDFs are available when this runs in Claude Code or the desktop app's Code tab.
+
+No pitch, links or promotion either way.
+
+The results block (chat only) lists one line per graded call (`src:id|closer|date|out|score`) so the next review can skip them. Claude Code tracks this in `graded-calls.json` instead.
 
 ## Failure cases
 

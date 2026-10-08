@@ -12,6 +12,17 @@ This is the `review-calls` workflow narrowed to one person, with deeper coaching
 3. **Team comparison.** If team grades are available in the ledger, run `aggregate.py report graded-calls.json` for the team and `aggregate.py report graded-calls.json --closer "Name"` for the closer, and compare them. Otherwise coach from the closer's calls alone and say so.
 4. **Minimum evidence.** With fewer than 5 graded calls, say the read is early and keep it to what the calls clearly show.
 
+## Report and PDF (when you can run code)
+
+Write that closer's block to `coaching.json` (see the review-calls `references/coaching.md`), then build their page and PDF:
+
+```bash
+python3 ${CLAUDE_SKILL_DIR}/../review-calls/scripts/build_report.py graded-calls.json --from <date> --to <date> \
+  --closer "Marcus Lee" --coaching coaching.json --open
+```
+
+This opens their page in the browser and writes `pdf/Marcus-Lee.pdf` to send them. Then give the coaching in chat as below.
+
 ## Coaching output
 
 Lead with the pattern that costs this closer the most deals, and quote the numbers from `aggregate.py`. Never make up a number. Plain, direct language.

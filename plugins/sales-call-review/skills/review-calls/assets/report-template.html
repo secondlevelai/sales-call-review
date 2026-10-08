@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales Call Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A0F; --surface:#101018; --surface2:#151520; --border:#20222B; --accent:#7C7BFF; --accent2:#ACA6FF;
+  --text:#ECECF1; --muted:#B2B2B8; --muted2:#8B8B96; --good:#4ADE80; --bad:#F87171; --warn:#FBBF24;
+  --track:#1C1C27; --display:"Space Grotesk",ui-sans-serif,system-ui,sans-serif; --body:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--accent2)}
+button{font:inherit;color:inherit}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--border);background:var(--surface);padding:22px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font:700 15px var(--display);letter-spacing:.2px;padding:0 10px 4px}
+.brand span{color:var(--accent)}
+.range{color:var(--muted2);font-size:12px;padding:0 10px 18px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.navlbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);padding:12px 10px 6px}
+.nav{display:block;width:100%;text-align:left;background:none;border:0;border-radius:10px;padding:9px 10px;cursor:pointer;color:var(--muted)}
+.nav:hover{background:var(--surface2);color:var(--text)}
+.nav.on{background:var(--surface2);color:var(--text);box-shadow:inset 0 0 0 1px var(--border)}
+.nav b{display:block;font-weight:600;color:inherit}
+.nav small{color:var(--muted2);font-size:12px}
+main{padding:28px 36px 60px;max-width:1240px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:22px}
+h1{font:700 28px/1.15 var(--display);margin:0}
+h2{font:600 18px var(--display);margin:0 0 4px}
+.sub{color:var(--muted2);font-size:13px;margin-top:6px}
+.btn{background:var(--accent);color:#0A0A0F;border:0;border-radius:10px;padding:9px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+.card .hint{color:var(--muted2);font-size:12.5px;margin:2px 0 14px}
+.headline{border-color:#2c2b52;background:linear-gradient(180deg,#14142a,#101018)}
+.headline p{font:600 20px/1.35 var(--display);margin:6px 0 0}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2)}
+.note{color:var(--muted2);font-size:12.5px;margin-top:10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.kpi .l{color:var(--muted2);font-size:12px}
+.kpi .v{font:700 24px var(--display);margin-top:4px}
+.kpi .d{font-size:12px;margin-top:2px;color:var(--muted2)}
+.up{color:var(--good)} .down{color:var(--bad)}
+table{width:100%;border-collapse:collapse}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);font-weight:500;text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);cursor:default;white-space:nowrap}
+th.sort{cursor:pointer} th.sort:hover{color:var(--text)}
+td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}
+tr.click{cursor:pointer} tr.click:hover td{background:var(--surface2)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;background:var(--surface2);box-shadow:inset 0 0 0 1px var(--border);color:var(--muted)}
+.pill.closed{color:var(--good)} .pill.lost{color:var(--bad)} .pill.not_pitched,.pill.dq,.pill.unknown{color:var(--muted2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.row{display:grid;grid-template-columns:minmax(150px,220px) 1fr auto;gap:14px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border-bottom:0}
+.row .name{font-weight:500}
+.row .meta{color:var(--muted2);font-size:12px}
+.bar{height:9px;background:var(--track);border-radius:99px;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.bar.bad i{background:var(--bad)} .bar.good i{background:var(--good)} .bar.mute i{background:#4a4a5c}
+.pair{display:grid;gap:5px}
+.pair .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted2)}
+.fix{border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:10px;background:var(--surface2)}
+.fix h3{font:600 15px var(--display);margin:0 0 4px}
+.fix .why{color:var(--muted);font-size:13px}
+blockquote{margin:10px 0 0;padding:8px 12px;border-left:3px solid #3a3a55;color:var(--muted);font-style:italic;background:#12121b;border-radius:0 8px 8px 0}
+.say{margin-top:10px;padding:10px 12px;border-radius:10px;background:#16163a;box-shadow:inset 0 0 0 1px #2c2b52}
+.say b{color:var(--accent2);font-size:11px;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:2px}
+details{border-top:1px solid var(--border);padding:8px 0}
+details summary{cursor:pointer;color:var(--muted);font-size:13px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+select{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font:inherit}
+.drawer{position:fixed;inset:0;background:rgba(5,5,10,.6);display:none;justify-content:flex-end;z-index:9}
+.drawer.on{display:flex}
+.panel{width:min(620px,100%);height:100%;overflow:auto;background:var(--surface);border-left:1px solid var(--border);padding:24px 26px}
+.sig{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:12px 0}
+.sig div{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px 10px;font-size:12.5px}
+.sig div b{display:block;font-size:15px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{font-size:12px;padding:3px 8px;border-radius:8px;background:var(--surface2);box-shadow:inset 0 0 0 1px var(--border)}
+.tag.bad{color:#fca5a5} .tag.good{color:#86efac}
+.empty{color:var(--muted2);font-size:13px}
+.foot{color:var(--muted2);font-size:12px;margin-top:30px}
+.callcard{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:10px;page-break-inside:avoid;break-inside:avoid}
+.printonly{display:none}
+@media (max-width:900px){.app{grid-template-columns:1fr}aside{position:static;height:auto}.grid2{grid-template-columns:1fr}main{padding:20px}}
+
+/* print: light, single view, everything expanded */
+@media print{
+  :root{--bg:#fff;--surface:#fff;--surface2:#f6f6fa;--border:#e4e4ec;--text:#14141c;--muted:#3c3c48;--muted2:#6b6b78;--track:#ececf3;--accent:#5b5ae6;--accent2:#4b4ad0}
+  @page{size:A4;margin:14mm}
+  html,body{background:#fff}
+  aside,.btn,.filters,.drawer,.noprint{display:none!important}
+  .app{display:block} main{padding:0;max-width:none}
+  .headline{background:#f3f3ff;border-color:#d9d9f5}
+  blockquote{background:#f6f6fa;border-left-color:#c9c9dc}
+  .say{background:#f0f0ff;box-shadow:inset 0 0 0 1px #d9d9f5}
+  .kpi,.fix,.row,.callcard,blockquote,.say{break-inside:avoid}
+  .card h2{break-after:avoid}
+  .grid2{display:block}
+  .printonly{display:block}
+  .tag.bad{color:#b42318} .tag.good{color:#15803d} .up{color:#15803d} .down{color:#b42318}
+}
+body.printmode aside,body.printmode .btn,body.printmode .filters,body.printmode .noprint{display:none!important}
+body.printmode .app{display:block} body.printmode main{padding:0 6px;max-width:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside id="rail"></aside>
+  <main id="main"></main>
+</div>
+<div class="drawer" id="drawer"><div class="panel" id="panel"></div></div>
+
+<script>
+const D = /*__REPORT_DATA__*/null;
+const L = D.labels;
+const $ = (s, el=document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pct = x => x == null ? "—" : Math.round(x*100) + "%";
+const num = (x, d=0) => x == null ? "—" : Number(x).toFixed(d);
+const money = x => x == null ? "—" : "$" + Math.round(x).toLocaleString();
+const W = x => Math.max(0, Math.min(100, Math.round((x||0)*100)));
+const params = new URLSearchParams(location.search);
+const PRINT = params.get("print") === "1";
+if (PRINT) document.body.classList.add("printmode");
+const cashKnown = D.team.cash_per_call != null;
+const OUT = {closed:"Closed", lost:"Lost", not_pitched:"Not pitched", dq:"Disqualified", unknown:"Unknown"};
+
+function fmtDate(s){ if(!s) return ""; const d = new Date(s+"T12:00:00"); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); }
+function rangeText(){ const m=D.meta; return `${fmtDate(m.from)} – ${fmtDate(m.to)}${m.to?", "+m.to.slice(0,4):""}`; }
+
+/* ---------- rail ---------- */
+function rail(active){
+  const reps = D.reps.map(r => {
+    const s = r.summary;
+    const stat = cashKnown ? `${money(s.cash_per_call)}/call` : `score ${num(s.avg_score)}`;
+    return `<button class="nav ${active==="rep:"+r.name?"on":""}" data-view="rep:${esc(r.name)}"><b>${esc(r.name)}</b><small>${s.calls} calls · ${pct(s.close_rate)} close · ${stat}</small></button>`;
+  }).join("");
+  $("#rail").innerHTML = `<div class="brand">Sales Call <span>Review</span></div>
+    <div class="range">${rangeText()}<br>${D.meta.graded} calls graded</div>
+    <button class="nav ${active==="team"?"on":""}" data-view="team"><b>Team overview</b><small>${D.reps.length} closers</small></button>
+    <div class="navlbl">Closers</div>${reps}
+    <div class="navlbl">Calls</div>
+    <button class="nav ${active==="calls"?"on":""}" data-view="calls"><b>All calls</b><small>${D.calls.length} graded</small></button>`;
+  $("#rail").querySelectorAll("[data-view]").forEach(b => b.onclick = () => go(b.dataset.view));
+}
+
+/* ---------- shared pieces ---------- */
+function topbar(title, sub){
+  return `<div class="top"><div><div class="eyebrow">Sales Call Review · ${rangeText()}</div><h1>${title}</h1><div class="sub">${sub}</div></div>
+    <button class="btn" onclick="window.print()">Save PDF</button></div>`;
+}
+function kpi(label, value, delta, hint){
+  return `<div class="kpi"><div class="l">${label}</div><div class="v">${value}</div>${delta?`<div class="d">${delta}</div>`:""}${hint?`<div class="d">${hint}</div>`:""}</div>`;
+}
+function vsTeam(mine, team, kind="pct", higherIsBetter=true){
+  if (mine == null || team == null) return "";
+  const diff = mine - team;
+  if (Math.abs(diff) < (kind==="pct"?0.005:0.05)) return `same as team`;
+  const good = higherIsBetter ? diff > 0 : diff < 0;
+  const txt = kind==="pct" ? `${diff>0?"+":""}${Math.round(diff*100)} pts` : kind==="money" ? `${diff>0?"+":"-"}${money(Math.abs(diff))}` : `${diff>0?"+":""}${num(diff,1)}`;
+  return `<span class="${good?"up":"down"}">${txt}</span> vs team`;
+}
+function fixes(c){
+  if (!c.fixes || !c.fixes.length) return `<div class="empty">No repeated leaks in these calls.</div>`;
+  return c.fixes.map((f,i) => `<div class="fix"><h3>${i+1}. ${esc(f.title)}</h3><div class="why">${esc(f.why||"")}</div>
+    ${f.quote?`<blockquote>“${esc(f.quote)}”</blockquote>`:""}
+    ${f.say_instead?`<div class="say"><b>Say this instead</b>${esc(f.say_instead)}</div>`:""}</div>`).join("");
+}
+function keepDoing(c){
+  return c.keep_doing && c.keep_doing.length ? `<div class="note" style="margin-top:14px"><b style="color:var(--good)">Keep doing:</b> ${c.keep_doing.map(esc).join(" · ")}</div>` : "";
+}
+function outcomeNote(){
+  const m = D.meta;
+  return m.outcomes_from_user < m.graded ? `<div class="note">Outcomes on ${m.graded - m.outcomes_from_user} call(s) are read from the call itself. Give Claude each deal's result and cash for exact close rates and dollar figures.</div>` : "";
+}
+
+function objectionsBlock(i, team){
+  if (!i.objections.length) return `<div class="empty">No objections came up.</div>`;
+  const max = Math.max(...i.objections.map(o => o.calls));
+  return i.objections.map(o => {
+    const t = team && team.objections.find(x => x.type === o.type);
+    const best = o.best;
+    return `<div class="row"><div><div class="name">${esc(o.label)}</div><div class="meta">${o.calls} call${o.calls>1?"s":""} · ${pct(o.share)} of calls</div></div>
+      <div class="pair"><div class="lbl"><span>Overcome</span><span>${pct(o.overcome)}${t&&team!==i?` <span style="color:var(--muted2)">(team ${pct(t.overcome)})</span>`:""}</span></div>
+        <div class="bar ${o.overcome!=null&&o.overcome<.5?"bad":"good"}"><i style="width:${W(o.overcome)}%"></i></div>
+        <div class="lbl"><span>Close rate when it comes up</span><span>${pct(o.close_rate)}</span></div>
+        <div class="bar mute"><i style="width:${W(o.close_rate)}%"></i></div></div>
+      <div class="meta" style="text-align:right">${o.lost_deals} lost${o.est_value_lost!=null?`<br>${money(o.est_value_lost)}`:""}</div></div>
+      ${best&&best.response?`<details ${PRINT?"open":""}><summary>Best answer on the team (${esc(best.closer)})</summary><blockquote>Lead: “${esc(best.quote)}”<br>${esc(best.closer)}: “${esc(best.response)}”</blockquote></details>`:""}`;
+  }).join("");
+}
+function mistakesBlock(i, team){
+  const leaks = i.mistakes.filter(m => (m.cost||0) > 0);
+  if (!leaks.length) return `<div class="empty">No mistake shows up more on lost calls than closed ones.</div>`;
+  return leaks.map(m => {
+    const t = team && team!==i ? team.mistakes.find(x => x.type === m.type) : null;
+    return `<div class="row"><div><div class="name">${esc(m.label)}</div><div class="meta">${m.count} call${m.count>1?"s":""}${t?` · team ${pct(t.share)} of calls`:""}</div></div>
+      <div class="pair"><div class="lbl"><span>On lost calls</span><span>${pct(m.lost_share)}</span></div><div class="bar bad"><i style="width:${W(m.lost_share)}%"></i></div>
+        <div class="lbl"><span>On closed calls</span><span>${pct(m.won_share)}</span></div><div class="bar good"><i style="width:${W(m.won_share)}%"></i></div></div>
+      <div class="meta" style="text-align:right">close ${pct(m.close_with)}<br>vs ${pct(m.close_without)}</div></div>
+      <details ${PRINT?"open":""}><summary>What to say instead</summary><div class="say">${esc(L.say_instead[m.type]||"")}</div></details>`;
+  }).join("");
+}
+function signalsBlock(i){
+  const rows = i.buy_vs_not.filter(s => s.bought != null || s.didnt != null);
+  if (!rows.length) return `<div class="empty">Not enough closed and lost calls to compare.</div>`;
+  return rows.map(s => {
+    const f = v => s.kind==="pct" ? pct(v) : s.kind==="min" ? (v==null?"—":num(v,1)+" min") : num(v,1);
+    const max = s.kind==="pct" ? 1 : Math.max(s.bought||0, s.didnt||0, 0.0001);
+    return `<div class="row"><div class="name">${esc(s.label)}</div>
+      <div class="pair"><div class="lbl"><span>Bought</span><span>${f(s.bought)}</span></div><div class="bar good"><i style="width:${W((s.bought||0)/max)}%"></i></div>
+        <div class="lbl"><span>Didn't buy</span><span>${f(s.didnt)}</span></div><div class="bar mute"><i style="width:${W((s.didnt||0)/max)}%"></i></div></div><div></div></div>`;
+  }).join("");
+}
+function questionsBlock(i){
+  if (!i.questions.length) return `<div class="empty">No questions logged.</div>`;
+  const max = Math.max(...i.questions.map(q => q.count));
+  return i.questions.slice(0,6).map(q => `<div class="row"><div><div class="name">${esc(q.label)}</div><div class="meta">“${esc(q.example||"")}”</div></div>
+    <div class="bar"><i style="width:${W(q.count/max)}%"></i></div><div class="meta">${q.count}×</div></div>`).join("");
+}
+function payBlock(i){
+  const mix = i.pay_mix || {}; const total = Object.values(mix).reduce((a,b)=>a+b,0);
+  if (!total) return "";
+  return `<div class="card"><h2>How closed deals paid</h2><div class="hint">${i.pif_rate!=null?`${pct(i.pif_rate)} paid in full. If most leads pay in full, the price may be too low.`:"Payment type wasn't said on these calls."}</div>
+    ${Object.entries(mix).filter(([k,v])=>v).map(([k,v]) => `<div class="row"><div class="name">${esc(L.pay[k]||k)}</div><div class="bar"><i style="width:${W(v/total)}%"></i></div><div class="meta">${v}</div></div>`).join("")}</div>`;
+}
+function callsTable(calls, showRep=true){
+  if (!calls.length) return `<div class="empty">No calls.</div>`;
+  if (PRINT) return calls.map(callCard).join("");
+  return `<table><thead><tr><th>Date</th>${showRep?"<th>Closer</th>":""}<th>Lead / summary</th><th>Outcome</th><th class="n">Score</th><th class="n">Min</th></tr></thead><tbody>
+    ${calls.map(c => `<tr class="click" data-call="${esc(c.src+":"+c.id)}"><td>${fmtDate(c.date)}</td>${showRep?`<td>${esc(c.closer)}</td>`:""}<td>${esc(c.sum)}</td>
+      <td><span class="pill ${c.out}">${OUT[c.out]||c.out}</span>${c.out==="closed"&&c.pay&&c.pay!=="none"&&c.pay!=="unknown"?` <span class="pill">${esc(L.pay[c.pay])}</span>`:""}</td>
+      <td class="n">${num(c.score)}</td><td class="n">${num(c.min)}</td></tr>`).join("")}</tbody></table>`;
+}
+function bindCalls(root){
+  root.querySelectorAll("[data-call]").forEach(tr => tr.onclick = () => openCall(tr.dataset.call));
+}
+function callDetail(c){
+  const yes = b => b ? "Yes" : b === false ? "No" : "—";
+  return `<div class="eyebrow">${fmtDate(c.date)} · ${esc(c.closer)} · ${num(c.min)} min</div>
+    <h2 style="margin-top:6px">${esc(c.sum)}</h2>
+    <div style="margin-top:8px"><span class="pill ${c.out}">${OUT[c.out]||c.out}</span> <span class="pill">Score ${num(c.score)}</span>${c.cash!=null?` <span class="pill">${money(c.cash)}</span>`:""}</div>
+    <p class="note" style="font-size:13.5px;color:var(--muted)"><b>Why:</b> ${esc(c.why)}</p>
+    <div class="sig"><div>Discovery before pitch<b>${c.sig.disc!=null?num(c.sig.disc)+" min":"—"}</b></div><div>Rep talk share<b>${pct(c.sig.talk)}</b></div>
+      <div>Lead said their pain<b>${yes(c.sig.pain)}</b></div><div>Reason to act now<b>${yes(c.sig.urg)}</b></div>
+      <div>Decision-maker on call<b>${yes(c.sig.dm)}</b></div><div>Asked for the sale<b>${yes(c.sig.ask)}</b></div></div>
+    ${c.obj.length?`<h3 style="font:600 14px var(--display);margin:16px 0 4px">Objections</h3>${c.obj.map(o => `<blockquote>Lead (${esc(L.objections[o.t]||o.t)}): “${esc(o.q)}”<br>${esc(c.closer)}: “${esc(o.r)}”<br><span class="${o.ok?"up":"down"}" style="font-style:normal">${o.ok?"Overcome":"Not overcome"}</span></blockquote>`).join("")}`:""}
+    ${c.mis.length?`<h3 style="font:600 14px var(--display);margin:16px 0 4px">Mistakes</h3><div class="tags">${c.mis.map(m=>`<span class="tag bad">${esc(L.mistakes[m])}</span>`).join("")}</div>`:""}
+    ${c.str.length?`<h3 style="font:600 14px var(--display);margin:16px 0 4px">Strengths</h3><div class="tags">${c.str.map(s=>`<span class="tag good">${esc(L.strengths[s])}</span>`).join("")}</div>`:""}
+    ${c.fix&&c.fix.length?`<h3 style="font:600 14px var(--display);margin:16px 0 4px">Fixes for next time</h3>${c.fix.map(f=>`<div class="say">${esc(f)}</div>`).join("")}`:""}`;
+}
+function callCard(c){ return `<div class="callcard">${callDetail(c)}</div>`; }
+function openCall(key){
+  const c = D.calls.find(x => x.src+":"+x.id === key); if (!c) return;
+  $("#panel").innerHTML = `<button class="btn ghost" style="float:right" onclick="closeCall()">Close</button>${callDetail(c)}`;
+  $("#drawer").classList.add("on");
+}
+function closeCall(){ $("#drawer").classList.remove("on"); }
+$("#drawer").onclick = e => { if (e.target.id === "drawer") closeCall(); };
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeCall(); });
+
+/* ---------- views ---------- */
+let sortKey = cashKnown ? "cash_per_call" : "avg_score", sortDir = -1;
+function leaderboard(){
+  const cols = [["closer","Closer",0],["calls","Calls",1],["close_rate","Close rate",1]]
+    .concat(cashKnown?[["cash_per_call","Cash / call",1],["cash","Cash",1]]:[])
+    .concat([["avg_score","Call score",1],["ask_rate","Asked for sale",1],["talk_ratio","Talk share",1],["avg_discovery","Discovery",1],["pif_rate","Paid in full",1],["top_mistake","Biggest leak",0]]);
+  const rows = [...D.reps].sort((a,b) => { const x=a.summary[sortKey], y=b.summary[sortKey];
+    if (typeof x === "string" || typeof y === "string") return sortDir*String(x||"").localeCompare(String(y||""));
+    return sortDir*((x??-1)-(y??-1)); });
+  const f = (k,v) => ({close_rate:pct, ask_rate:pct, talk_ratio:pct, pif_rate:pct, cash_per_call:money, cash:money, avg_score:x=>num(x), avg_discovery:x=>x==null?"—":num(x,1)+" min"}[k]||(x=>esc(x??"—")))(v);
+  return `<table id="lb"><thead><tr>${cols.map(([k,l,n])=>`<th class="sort ${n?"n":""}" data-k="${k}">${l}${sortKey===k?(sortDir<0?" ↓":" ↑"):""}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(r=>`<tr class="click" data-rep="${esc(r.name)}">${cols.map(([k,l,n])=>`<td class="${n?"n":""}">${k==="closer"?`<b>${esc(r.name)}</b>`:f(k,r.summary[k])}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+function bindLeaderboard(){
+  const t = $("#lb"); if (!t) return;
+  t.querySelectorAll("th.sort").forEach(th => th.onclick = () => { const k = th.dataset.k; sortDir = sortKey===k ? -sortDir : -1; sortKey = k; $("#lbwrap").innerHTML = leaderboard(); bindLeaderboard(); });
+  t.querySelectorAll("[data-rep]").forEach(tr => tr.onclick = () => go("rep:"+tr.dataset.rep));
+}
+
+function teamView(){
+  const t = D.team, m = D.meta, c = D.team_coaching;
+  return topbar(m.single_closer ? esc(m.single_closer) : "Team overview", `Graded ${m.graded} of ${m.confirmed} sales calls${m.recorder?` from ${esc(m.recorder[0].toUpperCase()+m.recorder.slice(1))}`:""} across ${D.reps.length} closer${D.reps.length>1?"s":""}. Generated ${esc(m.generated)}.`) + `
+  <div class="card headline"><div class="eyebrow">The biggest pattern this period</div><p>${esc(c.headline)}</p>${outcomeNote()}</div>
+  <div class="kpis">
+    ${kpi("Calls graded", `${m.graded}<span style="color:var(--muted2);font-size:15px"> / ${m.confirmed}</span>`)}
+    ${kpi("Close rate", pct(t.close_rate), `${t.closed} closed · ${t.lost} lost`)}
+    ${cashKnown?kpi("Cash collected", money(t.cash)):""}
+    ${cashKnown?kpi("Cash per call", money(t.cash_per_call), "cash ÷ calls taken"):""}
+    ${kpi("Avg call score", num(t.avg_score), "how well calls were run, 0–100")}
+    ${t.pif_rate!=null?kpi("Paid in full", pct(t.pif_rate), "of closed deals"):""}
+    ${kpi("Asked for the sale", pct(t.ask_rate))}
+    ${kpi("Objections overcome", pct(t.overcome_rate))}
+    ${kpi("Rep talk share", pct(t.talk_ratio), "aim for under 50%")}
+    ${kpi("Discovery before pitch", t.avg_discovery==null?"—":num(t.avg_discovery,1)+" min")}
+  </div>
+  <div class="card"><h2>Closers</h2><div class="hint">${cashKnown?"Ranked by cash per call. The closers at the top should be taking the most calls.":"Ranked by call score. Give Claude each deal's cash to rank by cash per call."} Click a closer to open their page. Click a column to sort.</div><div id="lbwrap">${leaderboard()}</div></div>
+  <div class="card"><h2>This week's fixes</h2><div class="hint">Where the team is losing the most deals, with what to say instead.</div>${fixes(c)}${keepDoing(c)}</div>
+  <div class="card"><h2>Objections</h2><div class="hint">How often each one comes up, how often it gets overcome, and the team's best real answer.</div>${objectionsBlock(t)}</div>
+  <div class="grid2">
+    <div class="card"><h2>Mistakes that cost deals</h2><div class="hint">Shows up more on lost calls than on closed ones.</div>${mistakesBlock(t)}</div>
+    <div class="card"><h2>What the buyers had</h2><div class="hint">Closed calls vs calls that didn't close.</div>${signalsBlock(t)}</div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h2>Questions leads ask</h2><div class="hint">Answer these before they're asked.</div>${questionsBlock(t)}</div>
+    ${payBlock(t) || '<div></div>'}
+  </div>
+  ${PRINT ? "" : `<div class="card noprint"><h2>All calls</h2><div class="hint">Click a call to see its full grade.</div>${callsTable(D.calls.slice(0,12))}${D.calls.length>12?`<div class="note"><a href="#" onclick="go('calls');return false">See all ${D.calls.length} calls →</a></div>`:""}</div>`}
+  <div class="foot">Built by @bingobuildsai</div>`;
+}
+
+function repView(name){
+  const r = D.reps.find(x => x.name === name); if (!r) return teamView();
+  const i = r.insights, t = D.team, s = r.summary, c = r.coaching;
+  const calls = D.calls.filter(x => x.closer === name);
+  return topbar(esc(name), `${s.calls} graded call${s.calls>1?"s":""} · ${rangeText()}`) + `
+  <div class="card headline"><div class="eyebrow">Coaching for ${esc(name)}</div><p>${esc(c.headline)}</p>${s.calls<3?`<div class="note">With fewer than 3 calls, treat this as what happened on these calls, not a pattern.</div>`:""}</div>
+  <div class="kpis">
+    ${kpi("Close rate", pct(s.close_rate), vsTeam(s.close_rate, t.close_rate))}
+    ${cashKnown?kpi("Cash per call", money(s.cash_per_call), vsTeam(s.cash_per_call, t.cash_per_call, "money")):""}
+    ${kpi("Call score", num(s.avg_score), vsTeam(s.avg_score, t.avg_score, "num"))}
+    ${kpi("Asked for the sale", pct(s.ask_rate), vsTeam(s.ask_rate, t.ask_rate))}
+    ${kpi("Objections overcome", pct(s.overcome_rate), vsTeam(s.overcome_rate, t.overcome_rate))}
+    ${kpi("Talk share", pct(s.talk_ratio), vsTeam(s.talk_ratio, t.talk_ratio, "pct", false))}
+    ${kpi("Discovery before pitch", s.avg_discovery==null?"—":num(s.avg_discovery,1)+" min", vsTeam(s.avg_discovery, t.avg_discovery, "num"))}
+    ${s.pif_rate!=null?kpi("Paid in full", pct(s.pif_rate), vsTeam(s.pif_rate, t.pif_rate)):""}
+  </div>
+  <div class="card"><h2>What to work on</h2><div class="hint">The patterns costing ${esc(name)} deals, with words for the next call.</div>${fixes(c)}${keepDoing(c)}</div>
+  <div class="card"><h2>Objections</h2><div class="hint">${esc(name)}'s numbers, with the team's for comparison.</div>${objectionsBlock(i, t)}</div>
+  <div class="grid2">
+    <div class="card"><h2>Mistakes that cost deals</h2><div class="hint">On ${esc(name)}'s lost vs closed calls.</div>${mistakesBlock(i, t)}</div>
+    <div class="card"><h2>Their buyers vs non-buyers</h2><div class="hint">What was different on the calls that closed.</div>${signalsBlock(i)}</div>
+  </div>
+  <div class="card"><h2>${esc(name)}'s calls</h2><div class="hint">${PRINT?"Every graded call with its quotes and fixes.":"Click a call to see its full grade."}</div>${callsTable(calls, false)}</div>
+  <div class="foot">Built by @bingobuildsai</div>`;
+}
+
+function callsView(){
+  const reps = [...new Set(D.calls.map(c => c.closer))];
+  return topbar("All calls", `${D.calls.length} graded calls · ${rangeText()}`) + `
+  <div class="card"><div class="filters"><select id="fRep"><option value="">All closers</option>${reps.map(r=>`<option>${esc(r)}</option>`).join("")}</select>
+    <select id="fOut"><option value="">All outcomes</option>${Object.entries(OUT).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select>
+    <select id="fSort"><option value="date">Newest first</option><option value="score">Lowest score first</option></select></div>
+  <div id="callwrap">${callsTable(D.calls)}</div></div><div class="foot">Built by @bingobuildsai</div>`;
+}
+function bindCallFilters(){
+  const apply = () => {
+    let list = D.calls.filter(c => (!$("#fRep").value || c.closer === $("#fRep").value) && (!$("#fOut").value || c.out === $("#fOut").value));
+    if ($("#fSort").value === "score") list = [...list].sort((a,b) => (a.score??0)-(b.score??0));
+    $("#callwrap").innerHTML = callsTable(list); bindCalls($("#callwrap"));
+  };
+  ["#fRep","#fOut","#fSort"].forEach(s => $(s).onchange = apply);
+}
+
+function go(view, push=true){
+  const main = $("#main");
+  if (view.startsWith("rep:")) main.innerHTML = repView(view.slice(4));
+  else if (view === "calls") main.innerHTML = callsView();
+  else { view = "team"; main.innerHTML = teamView(); }
+  rail(view); bindCalls(main); bindLeaderboard(); if (view === "calls") bindCallFilters();
+  document.title = (view.startsWith("rep:") ? view.slice(4) + " · " : "") + "Sales Call Review";
+  if (push && !PRINT) history.replaceState(null, "", "?view=" + encodeURIComponent(view));
+  window.scrollTo(0,0);
+}
+go(params.get("view") || (D.meta.single_closer ? "rep:" + (D.reps[0]||{}).name : "team"), false);
+</script>
+</body>
+</html>

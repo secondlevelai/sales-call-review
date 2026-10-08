@@ -27,6 +27,7 @@ Write exactly these keys. No extra prose.
   "out": "closed | lost | not_pitched | dq | unknown",
   "out_by": "transcript | user",
   "cash": null,
+  "pay": "none",
   "score": 72,
   "sum": "One sentence: who the lead is and what happened.",
   "why": "One sentence: why they bought, or the real reason they didn't.",
@@ -46,6 +47,7 @@ Field meanings:
 | `out` | `closed` = paid or committed on the call (PIF, plan, deposit). `lost` = pitched, didn't buy. `not_pitched` = showed but the offer was never presented. `dq` = disqualified. `unknown` = can't tell. |
 | `out_by` | `transcript` if you inferred the outcome from the call; `user` if the user gave it. |
 | `cash` | Cash collected in dollars, only if the user gave it. Otherwise `null`. |
+| `pay` | How a closed deal was paid: `pif` (paid in full), `plan` (payment plan / split pay), `deposit`, `financing` (Affirm, Klarna, Splitit and similar), or `unknown` if it closed but the call doesn't say. `none` if it didn't close. |
 | `score` | 0–100, how well the rep ran the call regardless of outcome. |
 | `obj` | Every objection the lead raised, in order. `t` = type key below, `q` = lead's exact words, `r` = rep's reply (copied or closely paraphrased), `ok` = overcome on this call. |
 | `qs` | Questions the lead asked about the offer. `t` = topic key below. |

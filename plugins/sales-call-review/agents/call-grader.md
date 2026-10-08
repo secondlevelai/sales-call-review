@@ -23,7 +23,7 @@ You grade one recorded sales call for a high-ticket coaching or info-product off
 
 ```
 {"id":"","src":"fathom|fireflies","closer":"","date":"YYYY-MM-DD","min":0,
- "out":"closed|lost|not_pitched|dq|unknown","out_by":"transcript","cash":null,"score":0,
+ "out":"closed|lost|not_pitched|dq|unknown","out_by":"transcript","cash":null,"pay":"none","score":0,
  "sum":"one sentence","why":"one sentence: why they bought or the real reason they didn't",
  "obj":[{"t":"","q":"lead's exact words","r":"rep's reply","ok":false}],
  "qs":[{"t":"","q":"lead's exact question"}],
@@ -33,6 +33,7 @@ You grade one recorded sales call for a high-ticket coaching or info-product off
 ```
 
 - `out`: `closed` = paid or committed on the call (pay in full, payment plan, deposit). `lost` = pitched, didn't buy. `not_pitched` = the offer was never presented. `dq` = disqualified. `unknown` = can't tell.
+- `pay` (closed deals only): `pif` paid in full · `plan` payment plan/split · `deposit` · `financing` (Affirm, Klarna, Splitit…) · `unknown` closed but not said. Use `none` if it didn't close.
 - `sig`: `disc` = minutes until the rep began pitching; `pain` = lead stated their problem in their own words; `urg` = lead gave a reason to act now; `dm` = everyone needed to say yes was on the call; `ask` = rep directly asked for the sale; `bud` = money discussed before the price was given; `talk` = rep's share of words spoken, 0–1.
 
 **Objection `t`:** `price` too expensive · `cash` don't have the money now · `spouse` need to talk to partner · `think` need to think about it · `timing` not the right time · `trust` tried something like this before · `diy` can figure it out myself · `fit` not sure it'll work for me · `other`
