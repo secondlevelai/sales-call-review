@@ -4,8 +4,8 @@ Grade every sales call your team recorded in Fathom or Fireflies, and see where 
 
 ## Use it
 
-1. Connect Fathom or Fireflies from this plugin's **Connectors** tab and sign in.
-2. Ask Claude: **"Review last week's sales calls."**
+1. Start a new chat and type **"Set up Sales Call Review."** Claude walks you step by step through connecting Fathom or Fireflies, checking it can see your closers' calls, and grading one call as a test.
+2. Every week after that, ask: **"Review last week's sales calls."**
 3. Claude lists the sales calls it found, grouped by closer, and asks you to confirm. It grades every one, counts the patterns, and writes a report: team numbers, a section per closer, the objection table, your team's best real answers, and three fixes for the week.
 
 Other things to ask:

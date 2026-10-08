@@ -9,7 +9,7 @@ You get the objections each closer doesn't get past, the mistakes that show up o
 
 ---
 
-## Set it up in 3 steps
+## Set it up in 2 steps
 
 You need a paid Claude plan (Pro, Max, Team or Enterprise) and Fathom or Fireflies recording your sales calls.
 
@@ -19,28 +19,33 @@ You need a paid Claude plan (Pro, Max, Team or Enterprise) and Fathom or Firefli
 
 1. Open **Customize → Plugins**.
 2. Click **Add → Add marketplace**.
-3. Paste: **`secondlevelai/sales-call-review`** and click **Add**.
+3. Paste **`secondlevelai/sales-call-review`** and click **Add**.
 4. Install **Sales Call Review**.
 
-![Add marketplace](docs/images/add-marketplace.png)
+**In Claude Code:** paste this repo's link into a session and say **"read INSTALL.md and set this up."** Claude installs it and walks you through the rest.
 
-**In Claude Code:** paste this repo's link into a session and say **"install this plugin."** (Or run the two commands in [Instructions for Claude](#instructions-for-claude).)
+### 2. Start a new chat and type
 
-### 2. Connect your call recorder
+> **Set up Sales Call Review**
 
-Open the plugin's **Connectors** tab, click **Connect** on **Fathom** or **Fireflies**, and sign in with your account.
+Claude walks you through the rest one step at a time (about 5 minutes):
 
-To review your whole team (not just your own calls), see [Fathom setup](docs/setup-fathom.md) or [Fireflies setup](docs/setup-fireflies.md). It takes a minute.
+1. **Connect Fathom or Fireflies.** It shows you exactly where to click and you sign in once.
+2. **Check whose calls it can see.** It lists your closers and, if any are missing, tells you the setting to change in Fathom or Fireflies.
+3. **Define what a sales call is,** so internal meetings and coaching calls are never graded.
+4. **Grade one real call as a test,** so you see exactly what you'll get.
 
-> On a Claude Team or Enterprise plan, an Owner may need to enable the Fathom or Fireflies connector for your organization first.
+Then every week, just type **"Review last week's sales calls."**
 
-### 3. Run it
+<details>
+<summary>Prefer to do it by hand?</summary>
 
-Type:
+1. **Customize → Plugins → Sales Call Review → Connectors**, then click **Connect** on **Fathom** or **Fireflies** and sign in. (In Claude Code: `/mcp`, then select the recorder and **Authenticate**.)
+2. To review your whole team, see [Fathom setup](docs/setup-fathom.md) or [Fireflies setup](docs/setup-fireflies.md).
+3. On a Claude Team or Enterprise plan, an Owner may need to allow the Fathom or Fireflies connector first.
+4. Type **"Review last week's sales calls."**
 
-> **Review last week's sales calls.**
-
-Claude lists the sales calls it found, grouped by closer, and asks you to confirm. Then it grades every one and writes the report.
+</details>
 
 ---
 
@@ -76,16 +81,18 @@ See [docs/troubleshooting.md](docs/troubleshooting.md).
 
 ## Instructions for Claude
 
-If a user pastes this repository's link and asks you to install it, and you're running in Claude Code with a shell, run:
+If a user pastes this repository's link and asks you to install or set it up, follow **[INSTALL.md](INSTALL.md)** step by step. It covers both the Claude app and Claude Code.
+
+Short version for Claude Code:
 
 ```bash
 claude plugin marketplace add secondlevelai/sales-call-review
 claude plugin install sales-call-review@secondlevelai
 ```
 
-Then tell the user to run `/reload-plugins` (or restart Claude Code), connect Fathom or Fireflies with `/mcp`, and ask "Review last week's sales calls."
+Then have the user run `/reload-plugins`, and continue with INSTALL.md from Step 2 (connect the recorder).
 
-If you're in the Claude app or claude.ai chat, you can't install plugins from a message. Tell the user to open **Customize → Plugins → Add → Add marketplace** and paste `secondlevelai/sales-call-review`.
+If you're in the Claude app or claude.ai chat, you can't install plugins from a message. Give the user the app steps from INSTALL.md (Step 1, Path A). Once it's installed, they type "Set up Sales Call Review" in a new chat.
 
 ---
 

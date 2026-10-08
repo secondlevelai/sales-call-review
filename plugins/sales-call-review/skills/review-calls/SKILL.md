@@ -12,7 +12,9 @@ Grade **every** sales call in the range against `references/rubric.md`, count th
 Check which call-recorder tools are available: Fathom (meeting list + transcript tools) or Fireflies (`fireflies_*` tools). Choose by what the tools do, not their exact names.
 
 - **Both connected:** ask once which one holds the sales calls.
-- **Neither connected:** say: "Connect Fathom or Fireflies first: open Customize → Plugins → Sales Call Review → Connectors, click Connect, and sign in. Or paste a transcript and I'll grade that one call." Then stop. If they paste a transcript, use the `grade-pasted-call` skill.
+- **Neither connected:** say: "You haven't connected Fathom or Fireflies yet. Want me to walk you through it? It takes about 5 minutes. (Or paste a transcript and I'll grade that one call.)" If yes, follow the **setup** skill. If they paste a transcript, use the `grade-pasted-call` skill.
+
+**Setup card:** if the user pasted a "Sales Call Review setup" card, or `sales-call-review.json` exists in the working folder (Claude Code / Cowork), use its recorder, closers and sales-call rule. Don't ask again for anything it already answers.
 
 Read `references/fathom.md` or `references/fireflies.md` for that recorder before listing anything.
 
@@ -24,7 +26,7 @@ Default: the last 7 days, or "since the last review" if the user pasted a result
 
 ## 3. List calls from metadata only
 
-List meetings for the range **without transcripts or summaries**, paging until every result is in (Fathom: follow the cursor; Fireflies: `skip` by 50). Keep only sales calls, using the rules in the recorder reference (external attendee, 15+ minutes, sales-like title; drop internal, coaching, no-shows and duplicates).
+List meetings for the range **without transcripts or summaries**, paging until every result is in (Fathom: follow the cursor; Fireflies: `skip` by 50). Keep only sales calls: use the setup card's sales-call rule if there is one, otherwise the rules in the recorder reference (external attendee, 15+ minutes, sales-like title; drop internal, coaching, no-shows and duplicates).
 
 Show one compact confirmation and wait for the answer:
 
