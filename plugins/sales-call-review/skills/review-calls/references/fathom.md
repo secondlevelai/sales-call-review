@@ -27,12 +27,12 @@ Each meeting includes a title, start and end times (for duration), who recorded 
 
 ## Spotting sales calls from the list
 
-Keep a meeting if all of these hold:
-- At least one external invitee.
+Decide this yourself; never ask the user which meetings are sales calls. Treat a meeting as a sales call if all of these hold:
+- At least one invitee outside the company.
 - 15 minutes or longer.
-- The title or meeting type looks like a sales or strategy call ("strategy call", "discovery", "consult", "application call", the offer name, or "[Lead name] <> [Closer]"), or the user said all external calls are sales calls.
+- The title doesn't clearly mark it as something else: client coaching, onboarding, kickoff, check-in, support, interview, podcast, internal, standup or team meeting.
 
-Drop: internal meetings, team standups, client coaching/onboarding calls (they are fulfillment, not sales), calls under 15 minutes (usually no-shows), and duplicates (same start time and invitees).
+Lean toward including: an external 15+ minute call with a vague title ("Zoom meeting", a person's name) counts. Drop internal meetings, the non-sales calls above, calls under 15 minutes (usually no-shows), and duplicates (same start time and attendees). Say how many you skipped and why in one line.
 
 ## Rep and lead in the transcript
 

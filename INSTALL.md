@@ -4,7 +4,7 @@
 
 <!-- MODULE METADATA
 module: sales-call-review
-version: v1.4.2
+version: v1.4.3
 status: RELEASED
 released: 2026-10-08
 requires: [claude-paid-plan, fathom-or-fireflies]
@@ -150,7 +150,7 @@ End with exactly this, and nothing after it:
 >
 > I'll show you how many sales calls I found per closer and ask how many to grade. Then I open your report: a team overview and a page per closer, each with their calls in a list and their patterns across all of them.
 
-That's the end of install. The **review-calls** skill takes over when they ask for the review. On the first run it checks team access and asks which meetings count as sales calls.
+That's the end of install. The **review-calls** skill takes over when they ask for the review. On the first run it checks team access and picks out the sales calls automatically (outside attendee, 15+ minutes, not coaching or internal).
 
 ---
 

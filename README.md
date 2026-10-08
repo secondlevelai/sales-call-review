@@ -34,8 +34,6 @@ Claude walks you through the rest one step at a time (about 5 minutes):
 
 1. **Connect Fathom or Fireflies.** It shows you exactly where to click and you sign in once.
 2. **Check whose calls it can see.** It lists your closers and, if any are missing, tells you the setting to change in Fathom or Fireflies.
-3. **Define what a sales call is,** so internal meetings and coaching calls are never graded.
-4. **Grade one real call as a test,** so you see exactly what you'll get.
 
 Then it offers to **run your first review**. Every week after that, just type **"Review last week's sales calls."**
 
@@ -118,7 +116,7 @@ If a user pastes this repository's link (or asks you to install or set it up) an
 5. **Finish with exactly one next step:**
    > "You're all set ✅ Say **"review last week's sales calls."** I'll show you the calls I found per closer, grade every one, and open your report."
 
-The first review checks team access and asks which meetings are sales calls, so you don't need to do that here.
+The first review checks team access and picks out the sales calls automatically, so you don't need to do that here.
 
 If you can't run commands (Claude app or claude.ai chat), you can't install from a message. Give them the clicks: **Customize → Plugins → Add → Add marketplace** → paste `secondlevelai/sales-call-review` → install, then **Connectors** → **Connect** on Fathom or Fireflies, then start a new chat and say "review last week's sales calls."
 

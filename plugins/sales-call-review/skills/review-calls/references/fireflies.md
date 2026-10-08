@@ -26,12 +26,12 @@ Get each full transcript separately with `fireflies_get_transcript`, only for ca
 
 ## Spotting sales calls from the list
 
-Keep a meeting if all of these hold:
-- At least one participant outside the company's email domain.
+Decide this yourself; never ask the user which meetings are sales calls. Treat a meeting as a sales call if all of these hold:
+- At least one participant outside the company.
 - 15 minutes or longer.
-- The title looks like a sales or strategy call ("strategy call", "discovery", "consult", "application call", the offer name, or "[Lead name] <> [Closer]"), or the user said all external calls are sales calls.
+- The title doesn't clearly mark it as something else: client coaching, onboarding, kickoff, check-in, support, interview, podcast, internal, standup or team meeting.
 
-Drop internal meetings, client coaching/onboarding calls, calls under 15 minutes, and duplicates.
+Lean toward including: an external 15+ minute call with a vague title ("Zoom meeting", a person's name) counts. Drop internal meetings, the non-sales calls above, calls under 15 minutes (usually no-shows), and duplicates (same start time and attendees). Say how many you skipped and why in one line.
 
 ## Rep and lead in the transcript
 

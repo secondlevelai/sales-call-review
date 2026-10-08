@@ -14,7 +14,7 @@ Check which call-recorder tools are available: Fathom (meeting list + transcript
 - **Both connected:** ask once, as buttons (Fathom / Fireflies), which one holds the sales calls.
 - **Neither connected:** say: "You haven't connected Fathom or Fireflies yet. Want me to walk you through it? It takes about 5 minutes. (Or paste a transcript and I'll grade that one call.)" If yes, follow the **setup** skill. If they paste a transcript, use the `grade-pasted-call` skill.
 
-**Setup card:** if the user pasted a "Sales Call Review setup" card, or `sales-call-review.json` exists in the working folder (Claude Code / Cowork), use its recorder, closers and sales-call rule. Don't ask again for anything it already answers.
+**Setup card:** if the user pasted a "Sales Call Review setup" card, or `sales-call-review.json` exists in the working folder (Claude Code / Cowork), use its recorder, scope and closers. Don't ask again for anything it already answers.
 
 Read `references/fathom.md` or `references/fireflies.md` for that recorder before listing anything.
 
@@ -26,9 +26,9 @@ Default: the last 7 days, or "since the last review" if the user pasted a result
 
 ## 3. List calls from metadata only
 
-List meetings for the range **without transcripts or summaries**, paging until every result is in (Fathom: follow the cursor; Fireflies: `skip` by 50). Keep only sales calls: use the setup card's sales-call rule if there is one, otherwise the rules in the recorder reference (external attendee, 15+ minutes, sales-like title; drop internal, coaching, no-shows and duplicates).
+List meetings for the range **without transcripts or summaries**, paging until every result is in (Fathom: follow the cursor; Fireflies: `skip` by 50). Keep only sales calls, using the rules in the recorder reference (external attendee, 15+ minutes, not clearly coaching/onboarding/internal; drop no-shows and duplicates).
 
-**First review (no `sales_call_rule` saved yet):** fold one question into the confirmation below. Show the meeting titles you're unsure about and ask: "Which of these are sales calls? Is there a naming pattern I can use next time (like 'Strategy Call')?" Then save the answer as `sales_call_rule` in `sales-call-review.json` (Claude Code / Cowork), so it's never asked again.
+**Pick out the sales calls yourself; don't ask which meetings are sales calls.** Use the rules in the recorder reference, and say in one line how many meetings you skipped and why.
 
 **Ask how many to grade.** There can be a lot of calls, so never start grading without this answer. Show one compact message and wait:
 
@@ -124,7 +124,7 @@ The results block (chat only) lists one line per graded call (`src:id|closer|dat
 | Situation | Say |
 | --- | --- |
 | Zero meetings in range | "No meetings found from [dates]. Want a wider range?" |
-| Meetings but no sales calls | List the 5 most likely candidates and ask which are sales calls. |
+| Meetings but none look like sales calls | Say so, list the 5 closest titles, and ask if any of them should be graded. |
 | Only the user's own calls | The coverage fix from the recorder reference. |
 | Transcript missing or empty | Skip it, count it as "not graded (no transcript)", and list it in the report. |
 | A call isn't actually a sales call | Mark it skipped and say why in the coverage line. |

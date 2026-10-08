@@ -139,25 +139,12 @@ Meetings set to **Only me** stay private, even from admins.
 
 ---
 
-## STEP 3: Which meetings are sales calls
+## STEP 3: Save the setup
 
-Explain: "So I never grade internal meetings or coaching calls, tell me what your sales calls look like."
+Don't ask which meetings are sales calls. The review picks them out automatically.
 
-Show 8–10 meeting titles from the list and ask which are sales calls and whether there's a naming pattern (e.g. "Strategy Call") or a meeting type.
-
-Record the rule, e.g. `title contains "Strategy Call" or "Discovery"; external attendee; 15+ min`.
-
-[VERIFY] Apply it to the 14-day list and show the count per closer: "Does that look right?"
-
-Save it:
-- **Path A:** write `sales-call-review.json` in the working folder: `{"recorder":"fathom","scope":"team","closers":["Marcus Lee","Dev Patel"],"sales_call_rule":"...","set_up":"YYYY-MM-DD"}`. Every review reads it.
-- **Path B:** give them this card to keep (pin the chat, or paste it into a review if their call names change):
-
-```
-Sales Call Review setup
-Recorder: Fathom · Scope: team (Marcus, Dev, Ana)
-Sales calls: title contains "Strategy Call" or "Discovery"; external attendee; 15+ min
-```
+- **Path A:** write `sales-call-review.json` in the working folder: `{"recorder":"fathom","scope":"team","closers":["Marcus Lee","Dev Patel"],"set_up":"YYYY-MM-DD"}`. Every review reads it.
+- **Path B:** nothing to save.
 
 ---
 
