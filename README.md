@@ -88,18 +88,26 @@ See [docs/troubleshooting.md](docs/troubleshooting.md).
 
 ## Instructions for Claude
 
-If a user pastes this repository's link and asks you to install or set it up, follow **[INSTALL.md](INSTALL.md)** step by step. It covers both the Claude app and Claude Code.
+If a user pastes this repository's link (or asks you to install or set it up) and you can run shell commands, do **all of this in one go, without waiting for them to ask again**. Full detail is in [INSTALL.md](INSTALL.md).
 
-Short version for Claude Code:
+1. **Install** (run these yourself):
+   ```bash
+   claude plugin marketplace add secondlevelai/sales-call-review
+   claude plugin install sales-call-review@secondlevelai
+   ```
+   If it's already installed, update it instead: `claude plugin marketplace update secondlevelai && claude plugin update sales-call-review@secondlevelai`.
+2. **Right away, ask both questions in one message.** Don't ask them to reload first:
+   > "Installed ✅ Two quick questions so I can connect it:
+   > 1. Do you record sales calls with **Fathom** or **Fireflies**?
+   > 2. Do you want to review **just your own calls**, or your **whole sales team's**?"
+3. **Start the sign-in for them**, in the background: `claude mcp login plugin:sales-call-review:<fathom|fireflies>`. Say: "A browser tab just opened. Sign in and click **Allow**, then say done." If no browser opens, tell them to type `/mcp`, choose `plugin:sales-call-review:<recorder>`, then **Authenticate**.
+4. **Confirm** with `claude mcp list` (the recorder shows **Connected**), then save `sales-call-review.json` in the working folder: `{"recorder":"<recorder>","scope":"<me|team>","set_up":"<today>"}`.
+5. **Finish with exactly one next step:**
+   > "You're all set ✅ Last step: type **`/reload-plugins`** so the plugin loads, then say **"review last week's sales calls."** I'll show you the calls I found per closer, grade every one, and open your report."
 
-```bash
-claude plugin marketplace add secondlevelai/sales-call-review
-claude plugin install sales-call-review@secondlevelai
-```
+The first review checks team access and asks which meetings are sales calls, so you don't need to do that here.
 
-Then have the user run `/reload-plugins`, and continue with INSTALL.md from Step 2 (connect the recorder).
-
-If you're in the Claude app or claude.ai chat, you can't install plugins from a message. Give the user the app steps from INSTALL.md (Step 1, Path A). Once it's installed, they type "Set up Sales Call Review" in a new chat.
+If you can't run commands (Claude app or claude.ai chat), you can't install from a message. Give them the clicks: **Customize → Plugins → Add → Add marketplace** → paste `secondlevelai/sales-call-review` → install, then **Connectors** → **Connect** on Fathom or Fireflies, then start a new chat and say "review last week's sales calls."
 
 ---
 

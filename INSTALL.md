@@ -4,7 +4,7 @@
 
 <!-- MODULE METADATA
 module: sales-call-review
-version: v1.2.1
+version: v1.3.0
 status: RELEASED
 released: 2026-10-08
 requires: [claude-paid-plan, fathom-or-fireflies]
@@ -29,10 +29,8 @@ You are helping someone install and set up Sales Call Review. They pasted this r
 - If something fails, don't dump error output. Explain it simply and give the fix.
 - Never skip a **[VERIFY]**.
 
-**Pacing (say these, in your own words):**
-- After install: "**Sales Call Review is installed. Next: connect Fathom or Fireflies.** That's where your calls live."
-- After connecting: "Connected. Let's check I can see your closers' calls."
-- After setup: "You're set up. Want me to run last week's calls now? You'll get an interactive report and a PDF for each closer."
+**Flow (Path A): one continuous run, with no "now say set it up" in between.**
+Install → immediately ask the two questions → start the sign-in → confirm it's connected → save the setup → finish with ONE next step: "type `/reload-plugins`, then say 'review last week's sales calls'." Don't ask them to reload until the very end. Everything before that uses shell commands, which work before the plugin is loaded.
 
 **Where they're running Claude:**
 - **You can run shell commands** → Claude Code: the Claude **desktop app's Code tab**, **VS Code**, **Cursor**, or a **terminal**. Use **Path A** everywhere below.
@@ -63,141 +61,98 @@ We're setting up **Sales Call Review**. When we're done, you'll say "review last
 
 ---
 
-## SCOPING
-
-Ask, then wait:
-
-1. **"Which records your sales calls: Fathom or Fireflies?"** → `RECORDER`. (Neither? They can paste a transcript and say "grade this call." Skip to the end.)
-2. **"Review just your own calls, or your whole sales team's?"** → `SCOPE`.
-
-Check whether it's already installed (Path A):
-
-```bash
-claude plugin list 2>/dev/null | grep -q "sales-call-review" && echo "INSTALLED=true" || echo "INSTALLED=false"
-```
-
-If installed, update it to the latest version and skip to Step 2:
-
-```bash
-claude plugin marketplace update secondlevelai && claude plugin update sales-call-review@secondlevelai
-```
-
----
-
 ## PREREQUISITES
 
 - **A paid Claude plan** (Pro, Max, Team or Enterprise). Connectors need one.
 - **Fathom or Fireflies** recording the sales calls, with transcripts on.
-- **Path A only:** `claude --version` works.
-- **For PDFs:** Google Chrome, Microsoft Edge or Chromium installed. Most computers have one. Without it, the report's **Save PDF** button does the same.
+- **Path A:** `claude --version` works.
+- **For PDFs:** Google Chrome, Microsoft Edge or Chromium. Most computers have one. Without it, the report's **Save PDF** button does the same.
 
-[VERIFY] Ask: "Ready to start?"
+Don't stop to ask about these. Mention them only if something fails.
 
 ---
 
-## INSTALL
+## INSTALL (Path A: Claude Code: desktop app Code tab, VS Code, Cursor, terminal)
 
-### Step 1: Install the plugin
+### Step 1: Install
 
-**Path A: Claude Code (desktop app Code tab, VS Code, Cursor, terminal).** Run these yourself:
+Check, then install or update. Run these yourself:
 
 ```bash
-claude plugin marketplace add secondlevelai/sales-call-review
-claude plugin install sales-call-review@secondlevelai
+if claude plugin list 2>/dev/null | grep -q "sales-call-review"; then
+  claude plugin marketplace update secondlevelai && claude plugin update sales-call-review@secondlevelai
+else
+  claude plugin marketplace add secondlevelai/sales-call-review && claude plugin install sales-call-review@secondlevelai
+fi
 ```
 
-Then tell them to type `/reload-plugins` (or restart) so it loads.
+[VERIFY] `claude plugin list` shows `sales-call-review@secondlevelai` enabled.
 
-**Path B: Claude app or claude.ai chat.** Give them the clicks:
-1. **Customize** → **Plugins** → **Add** → **Add marketplace**.
-2. Paste **`secondlevelai/sales-call-review`** → **Add**.
-3. Install **Sales Call Review**.
+### Step 2: Ask the two questions right away
 
-[VERIFY] Path A: `claude plugin list` shows `sales-call-review@secondlevelai` enabled. Path B: they see it under **Customize → Plugins**.
+In the same message that confirms the install:
 
-Then say, clearly:
+> "**Sales Call Review is installed ✅** Two quick questions so I can connect it:
+> 1. Do you record sales calls with **Fathom** or **Fireflies**?
+> 2. Do you want to review **just your own calls**, or your **whole sales team's**?"
 
-> "**Sales Call Review is installed. ✅ Next: connect Fathom or Fireflies.** That's where your sales calls live, and it's how I read them. It takes about 2 minutes."
+Record `RECORDER` and `SCOPE`. Neither recorder? Tell them they can paste any transcript and say "grade this call" after `/reload-plugins`, and stop.
 
----
+### Step 3: Connect the recorder (you start it, they sign in)
 
-### Step 2: Connect Fathom or Fireflies
-
-Explain: "The plugin reads your calls through {Recorder}'s own official connector. You sign in once with your {Recorder} account."
-
-**Path A: Claude Code (desktop app Code tab, VS Code, Cursor, terminal)**
-
-1. Start the sign-in yourself, **in the background** (it waits for them):
+Run in the background (it waits for them):
 
 ```bash
 claude mcp login plugin:sales-call-review:{recorder}
 ```
 
-2. Tell them: "A browser tab just opened. **Sign in to {Recorder} with the account that records your sales calls, and click Allow.** Then say done."
-3. Confirm it worked:
+Say:
+
+> "A browser tab just opened. **Sign in to {Recorder} with the account that records your sales calls, and click Allow.** Then say done."
+
+If no browser opens, or `claude` isn't on the PATH in their editor: "Type **`/mcp`**, choose **`plugin:sales-call-review:{recorder}`**, then **Authenticate**, and sign in."
+
+[VERIFY]
 
 ```bash
 claude mcp list 2>&1 | grep "sales-call-review:{recorder}"
 ```
 
-It should say **Connected**.
+Shows **Connected** → "**{Recorder}'s connected.** That was the hard part." Still "Needs authentication" → run `claude mcp logout plugin:sales-call-review:{recorder}`, then Step 3 again.
 
-4. Load it into this conversation: "Type **`/mcp`**, choose **`plugin:sales-call-review:{recorder}`**, and pick **Reconnect** if it doesn't already show connected." (Or `/reload-plugins`.)
+### Step 4: Save the setup
 
-**Doing it by hand instead** (or if the browser didn't open):
-- **Claude desktop app (Code tab), VS Code, Cursor:** type **`/mcp`** in the Claude message box and press Enter.
-- **Terminal:** type **`/mcp`** at the Claude prompt.
-- Choose **`plugin:sales-call-review:{recorder}`** → **Authenticate** → sign in in the browser → **Allow**.
-
-**Path B: Claude app or claude.ai chat**
-1. **Customize** → **Plugins** → **Sales Call Review** → **Connectors** tab.
-2. Next to **{Recorder}**, click **Connect** (or **Add**, then **Connect**). Sign in and click **Allow**.
-3. On a Claude **Team or Enterprise** plan, if {Recorder} isn't listed, an Owner has to allow it first under **Customize → Connectors**.
-4. **Start a new chat** and type **"set up Sales Call Review"**. The plugin's own setup takes over from here. Stop following this file.
-
-[VERIFY] (Path A) Call the recorder's list-meetings tool for the last 14 days (metadata only). Meetings come back → "**{Recorder}'s connected.** That was the hard part."
-
----
-
-### Step 3: Check team access
-
-Group the last 14 days of meetings by who recorded them and show the counts per person.
-
-If `SCOPE = team` and closers are missing:
-- **Fathom:** put closers on one team (e.g. **Sales**) with sales calls shared to it, or have a Fathom **Admin** granted **view access to all shared calls** and connect with that account. Private calls can't be included.
-- **Fireflies:** teammates in the same workspace are visible by default. A missing closer is either not in the workspace (invite them) or changed their privacy: **Settings → Personal → Recording & Privacy → Privacy & Access → Teammates & anyone with link**, applied to all meetings. "Only me" meetings can't be included.
-
-[VERIFY] Re-run the list. Every closer they expect appears.
-
----
-
-### Step 4: Define what a sales call is
-
-Show 8–10 meeting titles and ask which are sales calls and what naming pattern they use (e.g. "Strategy Call"). Save the answer to `sales-call-review.json` in the working folder:
+Write `sales-call-review.json` in the working folder:
 
 ```json
-{
-  "recorder": "fathom",
-  "scope": "team",
-  "closers": ["Marcus Lee", "Dev Patel", "Ana Ruiz"],
-  "sales_call_rule": "title contains 'Strategy Call' or 'Discovery'; external attendee; 15+ min",
-  "set_up": "2026-10-08"
-}
+{ "recorder": "fireflies", "scope": "team", "set_up": "2026-10-08" }
 ```
 
-[VERIFY] The rule gives the count per closer they expect.
+Fireflies teams: everyone in the same Fireflies workspace is visible by default. Fathom teams: closers' calls must be shared to the user's team, or the user must be an Admin with view access to shared calls. The first review checks this and gives the fix if anyone's missing.
+
+### Step 5: One next step
+
+End with exactly this, and nothing after it:
+
+> "**You're all set ✅**
+>
+> **Last step:** type **`/reload-plugins`** so the plugin loads, then say **"review last week's sales calls."**
+>
+> I'll show you the sales calls I found for each closer and you confirm. Then I grade every one and open your report: a team overview, a page per closer with their stats, the objections they lose to, exact quotes and what to say instead, plus a PDF for each closer."
+
+That's the end of install. The **review-calls** skill takes over when they ask for the review. On the first run it checks team access and asks which meetings count as sales calls.
 
 ---
 
-### Step 5: Run the first review
+## INSTALL (Path B: Claude app or claude.ai chat)
 
-Say:
+You can't install from a chat message. Give the clicks:
 
-> "**You're set up. 🎉** Let's run your first review: every sales call from last week, graded. You'll get an interactive report that opens in your browser, where you click between the team and each closer, plus a PDF for each closer that you can send them. Want me to run it now?"
+1. **Customize** → **Plugins** → **Add** → **Add marketplace** → paste **`secondlevelai/sales-call-review`** → install **Sales Call Review**.
+2. Open its **Connectors** tab → **Connect** on **Fathom** or **Fireflies** → sign in → **Allow**. On Claude Team or Enterprise, an Owner may need to allow the connector first under **Customize → Connectors**.
+3. Start a new chat and say **"review last week's sales calls."**
 
-If yes → ask Claude (yourself) to **"review last week's sales calls"**. The plugin's **review-calls** skill does the rest: it lists the calls per closer for them to confirm, grades every one, asks once for dollar results, then builds and opens `sales-call-reports/<dates>/report.html` and the PDFs.
-
-[VERIFY] The report opened in their browser, and `pdf/` holds `Team.pdf` plus one PDF per closer.
+Tell them the interactive report and PDFs need Claude to run code: in the Claude **desktop app**, use the **Code** tab. In plain chat the report comes in the conversation.
 
 ---
 

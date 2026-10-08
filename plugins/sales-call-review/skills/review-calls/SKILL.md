@@ -28,6 +28,8 @@ Default: the last 7 days, or "since the last review" if the user pasted a result
 
 List meetings for the range **without transcripts or summaries**, paging until every result is in (Fathom: follow the cursor; Fireflies: `skip` by 50). Keep only sales calls: use the setup card's sales-call rule if there is one, otherwise the rules in the recorder reference (external attendee, 15+ minutes, sales-like title; drop internal, coaching, no-shows and duplicates).
 
+**First review (no `sales_call_rule` saved yet):** fold one question into the confirmation below. Show the meeting titles you're unsure about and ask: "Which of these are sales calls? Is there a naming pattern I can use next time (like 'Strategy Call')?" Then save the answer as `sales_call_rule` in `sales-call-review.json` (Claude Code / Cowork), so it's never asked again.
+
 Show one compact confirmation and wait for the answer:
 
 ```
@@ -36,7 +38,7 @@ Found 38 sales calls (Oct 1–7) · skipped 21 internal/short/duplicate meetings
 Grade all 38? (Or name closers or calls to leave out.)
 ```
 
-**Coverage check:** if every call belongs to the signed-in user but they asked about a team, give the "teammates' calls are missing" fix from the recorder reference, then offer to grade what is visible.
+**Coverage check:** if every call belongs to the signed-in user but they asked about a team (or `sales-call-review.json` says `"scope": "team"`), give the "teammates' calls are missing" fix from the recorder reference, then offer to grade what is visible.
 
 ## 4. Grade every confirmed call
 
