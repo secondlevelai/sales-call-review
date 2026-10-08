@@ -11,7 +11,7 @@ Grade **every** sales call in the range against `references/rubric.md`, count th
 
 Check which call-recorder tools are available: Fathom (meeting list + transcript tools) or Fireflies (`fireflies_*` tools). Choose by what the tools do, not their exact names.
 
-- **Both connected:** ask once which one holds the sales calls.
+- **Both connected:** ask once, as buttons (Fathom / Fireflies), which one holds the sales calls.
 - **Neither connected:** say: "You haven't connected Fathom or Fireflies yet. Want me to walk you through it? It takes about 5 minutes. (Or paste a transcript and I'll grade that one call.)" If yes, follow the **setup** skill. If they paste a transcript, use the `grade-pasted-call` skill.
 
 **Setup card:** if the user pasted a "Sales Call Review setup" card, or `sales-call-review.json` exists in the working folder (Claude Code / Cowork), use its recorder, closers and sales-call rule. Don't ask again for anything it already answers.
@@ -42,7 +42,7 @@ How many should I grade?
 3. Just certain closers or dates (tell me which)
 ```
 
-Adjust option 2 to the real numbers (if every closer has 10 or fewer, say so and offer only "all" or "pick"). Grade exactly what they choose.
+Show the counts as text, then ask "How many should I grade?" **as clickable buttons** with your multiple-choice question tool (AskUserQuestion): options like **All 38**, **Most recent 10 per closer (30)** and **Certain closers or dates** (they type which via "Other"). Plain text only if you have no question tool. Adjust option 2 to the real numbers (if every closer has 10 or fewer, offer only "All" or "Certain closers or dates"). Grade exactly what they choose.
 
 **Coverage check:** if every call belongs to the signed-in user but they asked about a team (or `sales-call-review.json` says `"scope": "team"`), give the "teammates' calls are missing" fix from the recorder reference, then offer to grade what is visible.
 

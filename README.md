@@ -97,10 +97,11 @@ If a user pastes this repository's link (or asks you to install or set it up) an
    claude plugin install sales-call-review@secondlevelai
    ```
    If it's already installed, update it instead: `claude plugin marketplace update secondlevelai && claude plugin update sales-call-review@secondlevelai`.
-2. **Right away, ask both questions in one message.** Don't ask them to reload first:
-   > "Installed ✅ Two quick questions so I can connect it:
-   > 1. Do you record sales calls with **Fathom** or **Fireflies**?
-   > 2. Do you want to review **just your own calls**, or your **whole sales team's**?"
+2. **Right away, ask both questions.** Don't ask them to reload first. Say "Installed ✅", then show them **as clickable buttons** with your multiple-choice question tool (AskUserQuestion), in one call:
+   - "Which records your sales calls?" Options: **Fathom**, **Fireflies**
+   - "Whose calls should I review?" Options: **Just my own calls**, **My whole sales team's**
+
+   Only use plain text if you have no question tool.
 3. **Connect, in one message:**
    > "Now let's connect {Recorder}. In the Claude message box:
    > 1. Type **/reload-plugins** and press **Enter**. This loads Sales Call Review.

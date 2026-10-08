@@ -34,9 +34,13 @@ If they just installed the plugin, or this is their first message to it, say:
 
 > "Sales Call Review is installed. ✅
 >
-> **Next: connect your call recorder.** That's where your sales calls live, and it's how I read them. It takes about 2 minutes: you sign in to Fathom or Fireflies once, and I do the rest.
->
-> Which do you use: **Fathom** or **Fireflies**? And do you want to review **just your own calls** or your **whole sales team's**?"
+> **Next: connect your call recorder.** That's where your sales calls live, and it's how I read them. It takes about 2 minutes: you sign in to Fathom or Fireflies once, and I do the rest."
+
+Then ask both questions **as clickable buttons**, using your multiple-choice question tool (AskUserQuestion), in one call:
+- **Question 1** (header "Recorder"): "Which records your sales calls?" Options: **Fathom**, **Fireflies**.
+- **Question 2** (header "Scope"): "Whose calls should I review?" Options: **Just my own calls**, **My whole sales team's**.
+
+Only if you have no question tool, ask the same two questions as plain text.
 
 Record `RECORDER = fathom | fireflies` and `SCOPE = me | team`. If they use neither: they can paste any call transcript and say "grade this call". Stop setup there.
 

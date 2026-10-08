@@ -4,7 +4,7 @@
 
 <!-- MODULE METADATA
 module: sales-call-review
-version: v1.4.1
+version: v1.4.2
 status: RELEASED
 released: 2026-10-08
 requires: [claude-paid-plan, fathom-or-fireflies]
@@ -89,11 +89,13 @@ fi
 
 ### Step 2: Ask the two questions right away
 
-In the same message that confirms the install:
+Say "**Sales Call Review is installed ✅** Two quick questions so I can connect it." Then:
 
-> "**Sales Call Review is installed ✅** Two quick questions so I can connect it:
-> 1. Do you record sales calls with **Fathom** or **Fireflies**?
-> 2. Do you want to review **just your own calls**, or your **whole sales team's**?"
+Ask both questions **as clickable buttons**, using your multiple-choice question tool (AskUserQuestion), in one call:
+- **Question 1** (header "Recorder"): "Which records your sales calls?" Options: **Fathom**, **Fireflies**.
+- **Question 2** (header "Scope"): "Whose calls should I review?" Options: **Just my own calls**, **My whole sales team's**.
+
+Only if you have no question tool, ask the same two questions as plain text.
 
 Record `RECORDER` and `SCOPE`. Neither recorder? Tell them they can paste any transcript and say "grade this call" after `/reload-plugins`, and stop.
 
